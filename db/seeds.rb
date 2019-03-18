@@ -5,3 +5,7 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+User.create(first_name: 'Josh', last_name: 'Li', password: "test", email: "test@test.com")
+Project.create(name: 'Geshido', user_id: 1)
+Task.create(name: 'Create API endpoints', user_id: 1, is_completed: false, is_priority: false, project_id: 1)
+Task.create(name: 'Creat React task component', user_id: 1, is_completed: false, is_priority: false, project_id: 1)
