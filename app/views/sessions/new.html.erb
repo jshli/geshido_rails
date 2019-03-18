@@ -1,2 +1,16 @@
-<h1>Sessions#new</h1>
-<p>Find me in app/views/sessions/new.html.erb</p>
+<section class='split-hero'>
+    <main class="hero-main">
+        <div class='container'>
+            <h1>Welcome back.</h1>
+            <p>Ready to work? Fill in the details below to log back in.</p>
+            <%= form_tag "/sessions", method: "post" do %>
+                <%=react_component('FormInput', label: 'Email', type: 'email')%>
+                <%=react_component('FormInput', label: 'Password', type: 'password')%>
+
+                <button>Login</button>
+            <%end%>
+            <p>Don't have an account yet? <a href="/sign-up">Create an account</a></p>
+        </div>
+    </main>
+    <div class='hero-img'></div>
+</section>

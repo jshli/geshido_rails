@@ -1,0 +1,19 @@
+<section class='split-hero'>
+    <main class="hero-main">
+        <div class='container'>
+            <h1>Create an account</h1>
+            <p>Geshido is a task manager that gets you organised, then gets out of the way.</p>
+            <%= form_tag "/users", method: "post" do %>
+                <div class="grid">
+                    <%=react_component("FormInput", label: "First Name")%>
+                    <%=react_component("FormInput", label: "Last Name")%>
+                </div>
+                <%=react_component("FormInput", label: "Email", type: "email")%>
+                <%=react_component("FormInput", label: "Password", type: "password")%>
+                <button>Sign Up</button>
+            <%end%>
+        </div>
+        <p>Already have an account? <a href="/login">Log in here</a></p>
+    </main>
+    <div class='hero-img'></div>
+</section>

@@ -1,16 +1,17 @@
 module ApplicationHelper
-    def current_user
-        if session[:user_id]
-          @current_user ||= User.find(session[:user_id])
-        else
-          @current_user = nil
-        end
+  def current_user
+    if session[:user_id]
+      @current_user ||= User.find(session[:user_id])
+    else
+      @current_user = nil
     end
-    def logged_in?
-        if current_user
-          true
-        else
-          false
-        end
+  end
+  
+  def logged_in?
+    if current_user
+      true
+    else
+      false
     end
+  end
 end
