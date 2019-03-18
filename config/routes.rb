@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   get 'sessions/new'
-  get 'sessions/create'
-  get 'sessions/destroy'
+  post 'sessions', to: 'sessions#create'
+  delete 'sessions', to: 'sessions#destroy'
   resources :users
   resources :projects
   resources :timers
