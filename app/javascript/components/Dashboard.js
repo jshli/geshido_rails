@@ -14,7 +14,6 @@ class Dashboard extends React.Component {
             user: JSON.parse(this.props.user),
             projects: JSON.parse(this.props.projects),
             tasks: JSON.parse(this.props.tasks),
-            timers: JSON.parse(this.props.timers),
             taskInput: "",
             activeTask: "",
         }
@@ -50,12 +49,11 @@ class Dashboard extends React.Component {
                 return t;
             })
         })
-        // Axios({
-        //     method: 'put',
-        //     url: url,
-        //     data: data,
-        // })
-        // .then(res => console.log(res))
+        Axios({
+            method: 'put',
+            url: url,
+            data: data,
+        })
     }
 
     addNewTask() {
@@ -81,7 +79,7 @@ class Dashboard extends React.Component {
             tasks: this.state.tasks.filter(t => t != task)
         }))
         .then(this.setState({
-            editModal: ""
+            activeTask: ""
         }))
     }
 
@@ -124,7 +122,7 @@ class Dashboard extends React.Component {
                     markTaskComplete={this.markTaskComplete}
                     />
                 </main>
-                {activeTask !== "" ? <EditModal task={activeTask} setActiveTask={this.setActiveTask} clearActiveTask={this.clearActiveTask} deleteTask={() => this.deleteTask(editModal)} editTask={this.editTask}/> : ""}
+        {activeTask ? <EditModal task={activeTask} setActiveTask={this.setActiveTask} clearActiveTask={this.clearActiveTask} deleteTask={() => this.deleteTask(activeTask)} editTask={this.editTask}/> : "" }
             </section>
         )
     }

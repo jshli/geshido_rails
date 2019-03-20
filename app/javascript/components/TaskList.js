@@ -5,20 +5,27 @@ export default class TaskList extends React.Component {
         super(props)
         this.handleSubmit = this.handleSubmit.bind(this)
         this.state = {
+            tasks: this.props.tasks,
+            markTaskComplete: this.props.markTaskComplete,
+            setActiveTask: this.props.setActiveTask
         }
     }
 
-
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            tasks:nextProps.tasks
+        })
+    }
     handleSubmit(event){
         event.preventDefault()
         this.props.addNewTask()
     }
 
     render() {
-        const { user, tasks, markTaskComplete, setActiveTask } = this.props
+        const { user, tasks, markTaskComplete, setActiveTask } = this.state
         return (
             <div>
-                {tasks.map(task => <Task key={task.id} data={task} markTaskComplete={() => markTaskComplete(task)} setActiveTask={() => setActiveTask(task)}/>)}
+                {tasks.map(task => <Task key={task.id} task={task} markTaskComplete={() => markTaskComplete(task)} setActiveTask={() => setActiveTask(task)}/>)}
             </div>
         )
     }

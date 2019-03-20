@@ -199,8 +199,9 @@ input {
     @extend %flex-center-everything--column
   }
   .details__wrap {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 90% auto;
+    overflow: scroll;
     align-items: center;
     padding:1rem 3rem;
     overflow: hidden;
@@ -287,5 +288,10 @@ input {
   textarea:active, textarea:focus {
     border: 1px solid rgba(0,0,0,0.1);
   }
+}
 
+.timer-wrap {
+  .active {
+    color: red;
+  }
 }

@@ -58,3 +58,4 @@ gem 'rack-cors', require: 'rack/cors'
 
 gem 'webpacker'
 gem 'react-rails'
+gem 'time_difference'

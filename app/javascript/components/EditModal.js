@@ -6,8 +6,12 @@ export default class EditModal extends React.Component {
         super(props)
         this.deleteTask = this.deleteTask.bind(this)
         this.state = {
-            task: this.props.task,
+            task: this.props.task
         }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({task: nextProps.task})
     }
 
     handleChange = event => {
@@ -27,12 +31,13 @@ export default class EditModal extends React.Component {
         this.props.clearActiveTask()
     }
 
+
     // componentWillMount() {
     //     const url = `/api/timers/${this.state.task.id}`
     //     if (this.state.task) {
     //         Axios.get(url)
     //         .then(res => this.setState({
-    //             history: [...this.state.history, res]
+               
     //         }))
     //     }
     // }
@@ -55,7 +60,7 @@ export default class EditModal extends React.Component {
                 <button>Save</button>
                     <div className='content-wrap'>
                         <input onChange={this.handleChange} type="checkbox" name="is_completed" id=""/>
-                        <input onChange={this.handleChange} className="task-name" type="text" name="name" defaultValue={task.name}  />
+                        <input onChange={this.handleChange} className="task-name" type="text" name="name" ref={this.input} defaultValue={task.name}  />
                     </div>
                     <p>Project name</p>
                         <div className='content-wrap'>
