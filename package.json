@@ -1,5 +1,8 @@
 {
   "name": "geshido_api",
   "private": true,
-  "dependencies": {}
+  "dependencies": {
+    "axios": "^0.18.0",
+    "moment": "^2.24.0"
+  }
 }
