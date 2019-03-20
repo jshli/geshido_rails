@@ -29,10 +29,26 @@ class TasksController < ApplicationController
         end
     end
 
-    
+    def update
+        task = Task.find(params[:id])
+        task.name = params[:name]
+        task.name = params[:is_completed]
+        task.description = params[:description]
+        task.start_date = params[:start_date]
+        task.due_date = params[:start_date]
+        if task.save
+            render json: task
+        else
+            render json: {error: task.errors.full_messages, status: 500}.to_json
+        end
+    end
     def destroy
         task = Task.find(params[:id])
-        task.destroy
+        if task.destroy
+            render json: task
+        else
+            render json: {error: task.errors.full_messages, status: 500}.to_json
+        end
     end
 
     def show

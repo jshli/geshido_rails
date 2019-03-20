@@ -1,3 +1,8 @@
+import React from "react"
+import Sidebar from "./Sidebar"
+import TaskList from "./TaskList"
+import EditModal from "./EditModal"
+import Axios from 'axios'
 
 class Dashboard extends React.Component {
     constructor(props){
@@ -5,14 +10,13 @@ class Dashboard extends React.Component {
         this.addNewTask = this.addNewTask.bind(this);
         this.markTaskComplete = this.markTaskComplete.bind(this)
         this.taskInput = this.taskInput.bind(this)
-        this.setEditModal = this.setEditModal.bind(this)
         this.state = {
             user: JSON.parse(this.props.user),
             projects: JSON.parse(this.props.projects),
             tasks: JSON.parse(this.props.tasks),
             timers: JSON.parse(this.props.timers),
             taskInput: "",
-            editModal: "",
+            activeTask: "",
         }
     }
 
@@ -22,11 +26,36 @@ class Dashboard extends React.Component {
         })
     }
 
-    setEditModal(task) {
+    setActiveTask = (task) => {
         this.setState({
-            editModal: task
-        }, () => console.log(this.state.editModal))
-       
+            activeTask: task
+        })  
+    }
+
+    clearActiveTask = () => {
+        this.setState({
+            activeTask: ""
+        })
+
+    }
+
+    editTask = data => {
+        const activeTask = this.state.activeTask
+        const url = `/tasks/${this.state.activeTask.id}`
+        this.setState({
+            tasks: this.state.tasks.map(function(t){
+                if (t.id === activeTask.id){
+                    t = data;
+                }
+                return t;
+            })
+        })
+        // Axios({
+        //     method: 'put',
+        //     url: url,
+        //     data: data,
+        // })
+        // .then(res => console.log(res))
     }
 
     addNewTask() {
@@ -45,6 +74,16 @@ class Dashboard extends React.Component {
         }))
     }
 
+    deleteTask(task) {
+        const url = `/tasks/${task.id}`
+        Axios.delete(url)
+        .then(this.setState({
+            tasks: this.state.tasks.filter(t => t != task)
+        }))
+        .then(this.setState({
+            editModal: ""
+        }))
+    }
 
     markTaskComplete(task) {
         let url = `/tasks/${task.id}/complete`;
@@ -65,11 +104,11 @@ class Dashboard extends React.Component {
 
 
     render () {
-        const {user, projects, tasks, editModal} = this.state;
+        const {user, projects, tasks, activeTask} = this.state;
         return (
-            <section className={`dashboard ${editModal !== "" ? `dashboard--3col`: ``}`}>
+            <section className={`dashboard ${activeTask !== "" ? `dashboard--3col`: ``}`}>
                 <Sidebar projects={projects} />
-                <main className={`${editModal === "" ? "main" : "main--shrink"}`}>
+                <main className={`${activeTask === "" ? "main" : "main--shrink"}`}>
                 <h1>Welcome back, {`${user.first_name}`}</h1>
                 <p>Let's get productive.</p>
                 <form onSubmit={this.addNewTask}>
@@ -81,12 +120,13 @@ class Dashboard extends React.Component {
                     tasks={tasks} 
                     addNewTask={() => this.addNewTask()} 
                     taskInput={this.taskInput}
-                    setEditModal = {this.setEditModal}
+                    setActiveTask = {this.setActiveTask}
                     markTaskComplete={this.markTaskComplete}
                     />
                 </main>
-                <EditModal task={editModal} />
+                {activeTask !== "" ? <EditModal task={activeTask} setActiveTask={this.setActiveTask} clearActiveTask={this.clearActiveTask} deleteTask={() => this.deleteTask(editModal)} editTask={this.editTask}/> : ""}
             </section>
         )
     }
 }
+export default Dashboard

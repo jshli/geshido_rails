@@ -1,4 +1,5 @@
-class FormInput extends React.Component {
+import React from "react"
+export default class FormInput extends React.Component {
     constructor(props) {
         super(props)
         this.state = {

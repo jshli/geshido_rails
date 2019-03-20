@@ -227,6 +227,7 @@ input {
 
 .edit-modal {
   padding: 3rem 0 0 2rem;
+
   .edit-wrap {
     position: sticky;
     top: 1rem;
@@ -250,8 +251,21 @@ input {
     margin: 1.5rem 0;
   }
   .utility-menu {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
     display: flex;
     justify-content: space-between;
+    z-index: 2;
+    .delete-btn {
+      @extend %button-reset;
+      transition: all ease 0.3s;
+      color: rgba(0,0,0,0.5);
+      font-size: 1rem;
+    }
+    .delete-btn:hover {
+      color: red;
+    }
   }
   .content-wrap {
     @extend %flex-center-la--row

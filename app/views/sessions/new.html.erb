@@ -6,7 +6,6 @@
             <%= form_tag "/sessions", method: "post" do %>
                 <%=react_component('FormInput', label: 'Email', type: 'email')%>
                 <%=react_component('FormInput', label: 'Password', type: 'password')%>
-
                 <button>Login</button>
             <%end%>
             <p>Don't have an account yet? <a href="/sign-up">Create an account</a></p>

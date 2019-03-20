@@ -1,10 +1,12 @@
-class Task extends React.Component {
+import React from "react"
+export default class Task extends React.Component {
     constructor(props) {
         super(props)
         this.markTaskComplete = this.markTaskComplete.bind(this)
         this.handleClick = this.handleClick.bind(this)
         this.state = {
             task: this.props.data,
+            history: []
         }
     }
     markTaskComplete(e) {
@@ -12,8 +14,12 @@ class Task extends React.Component {
         this.props.markTaskComplete()
     }
     
+    componentWillReceiveProps(nextProps) {
+        console.log(nextProps)
+    }
+
     handleClick() {
-        this.props.setEditModal()
+        this.props.setActiveTask()
     }
     render() {
         const { task } = this.state
