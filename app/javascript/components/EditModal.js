@@ -13,7 +13,7 @@ export default function EditModal(props){
             setLogs(result.data)
         }
         fetchData();
-    }, [])
+    }, [props, setLogs])
 
     const handleChange = event => {
         props.editTask(event.target.name, event.target.value)

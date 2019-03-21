@@ -45,6 +45,7 @@ class TimersController < ApplicationController
             log.description = "Timer stopped"
             log.user_id = current_user.id
             log.task_id = task.id
+            log.save
         else
             render json: {error: timer.errors.full_messages, status: 500}.to_json
         end
