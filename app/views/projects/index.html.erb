@@ -1,0 +1,1 @@
+<%=react_component('Dashboard', {user: "#{@current_user.to_json}", projects: "#{@projects.to_json}", tasks: "#{@tasks.to_json}", currentMode: "projects", greeting: "Your Projects", subheading: "What are we creating today?"})%>

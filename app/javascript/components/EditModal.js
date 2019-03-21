@@ -3,7 +3,6 @@ import Axios from "axios"
 import moment from "moment"
 
 export default function EditModal(props){
-   
 
     const handleChange = event => {
         props.editTask(event.target.name, event.target.value)
@@ -14,23 +13,25 @@ export default function EditModal(props){
         props.deleteTask()
     } 
 
-    const handleExit = () => {
+    const handleExit = (event) => {
+        event.preventDefault()
         props.clearActiveTask()
     }
 
+    const handleSubmit = (event) =>{
+        event.preventDefault()
+        props.clearActiveTask()
+    }
 
-    // componentWillMount() {
-    //     const url = `/api/timers/${this.state.task.id}`
-    //     if (this.state.task) {
-    //         Axios.get(url)
-    //         .then(res => this.setState({
-               
-    //         }))
-    //     }
-    // }
+    const formatTime = minutes => {
+        let hours = Math.floor(minutes / 60)
+        let rest = minutes % 60
+        return minutes > 60 ? `${hours} h ${("0" + rest).slice(-2)} m` : `${("0" + rest).slice(-2)} m`
+    }
+
 
         const { task } = props;
-        console.log(task)
+
         return(
             <div className='edit-modal'>
                 <div className="edit-wrap">
@@ -43,28 +44,26 @@ export default function EditModal(props){
                             <a onClick={handleExit} href=""><i className="fas fa-times"></i></a>
                         </div>
                     </div>
-                <form>
-                <button>Save</button>
+                <form onSubmit={handleSubmit}>
                     <div className='content-wrap'>
-                        <input onChange={handleChange} type="checkbox" name="is_completed" id=""/>
+                        <div className={`check ${task.is_completed ? `check--completed` : "" }`}>
+                            <input onChange={handleChange} type="checkbox" name="is_completed" id="" checked = {task.is_completed ? true : false }/>
+                        </div>
                         <input onChange={handleChange} className="task-name" type="text" name="name"  value={task.name}  />
                     </div>
                     <p>Project name</p>
                         <div className='content-wrap'>
-                            <p>0 minutes so far</p>
+                            <p>{formatTime(task.total_time)} minutes so far</p>
+                            
                             <div className='content-wrap'>
-                                <input onChange={handleChange} type="date"  name="start_date" />
-                                <label>Start Date</label>
-                            </div>
-                            <div className='content-wrap'>
-                                <input onChange={handleChange} type="date" name="due_date" />
+                                <input onChange={handleChange} type="date" name="due_date" value={task.due_date} />
                                 <label>Due Date</label>
                             </div>
                         </div>
                     <div className="divider"></div>
                     <div className='content-wrap'>
                         <i className="fas fa-align-left"></i>
-                        <textarea placeholder={task.description} placeholder={task.description === null ? "Description" : task.description}></textarea>
+                        <textarea onChange={handleChange} placeholder={task.description === null ? "Description" : ""} name="description" value={task.description !== null ? task.description: ""}></textarea>
                     </div>
                 </form>
                 </div>

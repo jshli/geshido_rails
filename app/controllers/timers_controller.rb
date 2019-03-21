@@ -31,10 +31,11 @@ class TimersController < ApplicationController
         timer.end_time = Time.new
         timer.total_time = (TimeDifference.between(timer.start_time, timer.end_time).in_minutes).round
         if timer.save
+            render json: timer
             task = Task.find(timer.task_id)
             task.current_timer_id = nil
+            task.total_time = task.total_time += timer.total_time
             task.save
-            render json: timer
         else
             render json: {error: timer.errors.full_messages, status: 500}.to_json
         end

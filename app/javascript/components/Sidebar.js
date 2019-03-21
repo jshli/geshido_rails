@@ -10,7 +10,7 @@ export default class Sidebar extends React.Component {
         return (
             <aside>
                 <div className="border"></div>
-                <a href="/tasks" className="a--current-page">
+                <a href="/tasks" >
                     <i className="fas fa-tasks"></i>
                     <p>Tasks</p>
                 </a>
@@ -18,10 +18,16 @@ export default class Sidebar extends React.Component {
                     <i className="fas fa-chart-pie"></i>
                     <p>Timelogs</p>
                 </a>
-                <a href="">
-                    <p>Projects</p>
-                    <i className="fas fa-plus"></i>
-                </a>
+                <div className="project-link">
+                    <a href="/projects" >
+                        <p>Projects</p>
+                    </a>
+                    <a href="/projects/new">
+                        <i className="fas fa-plus"></i>
+                    </a>
+                   
+                </div>
+            
                 {projects.map(project => 
                     (
                     <a key={`${project.id}`} href ="">
