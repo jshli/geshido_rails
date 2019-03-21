@@ -100,8 +100,9 @@ input {
       border: none;
       font-weight: bold;
       border-bottom: #ECECEC solid 1px;
-      padding: 1rem;
-      transition: all ease 0.3s
+      padding: 1.5rem 1rem;
+      transition: all ease 0.3s;
+      
     }
     .grid {
       @extend %grid-col-2;

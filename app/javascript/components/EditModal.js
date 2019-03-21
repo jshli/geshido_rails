@@ -1,6 +1,6 @@
 import React, { useState, useEffect} from "react"
 import Axios from "axios"
-import moment from "moment"
+import Moment from "moment"
 
 const LOGS = []; 
 export default function EditModal(props){
@@ -10,7 +10,6 @@ export default function EditModal(props){
         const fetchData = async() =>{
             const url = `/api/logs/${props.task.id}`
             const result = await Axios.get(url);
-            console.log(result)
             setLogs(result.data)
         }
         fetchData();
@@ -81,8 +80,8 @@ export default function EditModal(props){
                 </div>
                 <div className="divider"></div>
                 {logs.map(log => {
-                    <p>{`${log.description} at ${log.created_at}`} </p>
-                })}
+                    return <p>{`${log.description} at ${Moment(log.created_at).format("dddd, MMMM Do")}`} </p>
+                }).reverse()}
             </form>
             </div>
         </div>
