@@ -9,7 +9,7 @@ export default class Task extends React.Component {
         this.state = {
             task: this.props.task,
             isComplete: this.props.task.is_completed,
-            currentTimer: this.props.task.current_timer_id,
+            currentTimer: null,
             timers: []
         }
     }
@@ -25,6 +25,13 @@ export default class Task extends React.Component {
         .then(res => this.setState({
             timers: [...this.state.timers, res.data]
         }))
+        if (this.state.task.current_timer_id !== null) {
+            const timerUrl = `/timers/${this.state.task.current_timer_id}`
+            Axios.get(timerUrl)
+            .then(res => this.setState({
+                currentTimer: res
+            }))
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -53,6 +60,14 @@ export default class Task extends React.Component {
             }))
         }
         // console.log(this.state.timer)
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.task !== prevProps.task){
+            this.setState({
+                task: this.props.task
+            })
+        }   
     }
    
 

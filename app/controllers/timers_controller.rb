@@ -1,9 +1,14 @@
 class TimersController < ApplicationController
     skip_before_action :verify_authenticity_token
-    def show
+    def index
         task = Task.find(params[:id])
         timers = task.timers
         render json: timers
+    end
+
+    def show
+        timer = Timer.find(params[:id])
+        render json: timer
     end
 
     def create

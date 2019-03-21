@@ -1,34 +1,21 @@
 import React from "react"
 import Axios from "axios"
 import moment from "moment"
-export default class EditModal extends React.Component {
-    constructor(props) {
-        super(props)
-        this.deleteTask = this.deleteTask.bind(this)
-        this.state = {
-            task: this.props.task
-        }
+
+export default function EditModal(props){
+   
+
+    const handleChange = event => {
+        props.editTask(event.target.name, event.target.value)
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.setState({task: nextProps.task})
-    }
-
-    handleChange = event => {
-        const editedTask = {...this.state.task}
-        editedTask[event.target.name] = event.target.value
-        this.setState({
-            task: editedTask
-        })
-        this.props.editTask(this.state.task)
-    }
-
-    deleteTask(e) {
+    const deleteTask = (e) =>{
         e.preventDefault();
-        this.props.deleteTask()
+        props.deleteTask()
     } 
-    handleExit = () => {
-        this.props.clearActiveTask()
+
+    const handleExit = () => {
+        props.clearActiveTask()
     }
 
 
@@ -42,35 +29,35 @@ export default class EditModal extends React.Component {
     //     }
     // }
 
-    render() {
-        const { task } = this.state;
+        const { task } = props;
+        console.log(task)
         return(
             <div className='edit-modal'>
                 <div className="edit-wrap">
                     <div className='utility-menu'>
                         <div className='content-wrap'>
                             <a><i className="fas fa-flag"></i></a>
-                            <form onSubmit={this.deleteTask}>
+                            <form onSubmit={deleteTask}>
                                 <button className="delete-btn"><i className="fas fa-trash"></i></button>
                             </form>
-                            <a onClick={this.handleExit} href=""><i className="fas fa-times"></i></a>
+                            <a onClick={handleExit} href=""><i className="fas fa-times"></i></a>
                         </div>
                     </div>
                 <form>
                 <button>Save</button>
                     <div className='content-wrap'>
-                        <input onChange={this.handleChange} type="checkbox" name="is_completed" id=""/>
-                        <input onChange={this.handleChange} className="task-name" type="text" name="name" ref={this.input} defaultValue={task.name}  />
+                        <input onChange={handleChange} type="checkbox" name="is_completed" id=""/>
+                        <input onChange={handleChange} className="task-name" type="text" name="name"  value={task.name}  />
                     </div>
                     <p>Project name</p>
                         <div className='content-wrap'>
                             <p>0 minutes so far</p>
                             <div className='content-wrap'>
-                                <input onChange={this.handleChange} type="date"  name="start_date" />
+                                <input onChange={handleChange} type="date"  name="start_date" />
                                 <label>Start Date</label>
                             </div>
                             <div className='content-wrap'>
-                                <input onChange={this.handleChange} type="date" name="due_date" />
+                                <input onChange={handleChange} type="date" name="due_date" />
                                 <label>Due Date</label>
                             </div>
                         </div>
@@ -84,4 +71,3 @@ export default class EditModal extends React.Component {
             </div>
         )
     }
-}

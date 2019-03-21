@@ -27,7 +27,7 @@ class Dashboard extends React.Component {
 
     setActiveTask = (task) => {
         this.setState({
-            activeTask: task
+            activeTask: task.id
         })  
     }
 
@@ -38,22 +38,25 @@ class Dashboard extends React.Component {
 
     }
 
-    editTask = data => {
+    editTask = (field, value) => {
+        console.log(field, value)
         const activeTask = this.state.activeTask
-        const url = `/tasks/${this.state.activeTask.id}`
         this.setState({
             tasks: this.state.tasks.map(function(t){
-                if (t.id === activeTask.id){
-                    t = data;
+                if (t.id === activeTask){
+                    return {...t, [field]: value}
+                } else {
+                    return t;
                 }
-                return t;
+               
             })
         })
-        Axios({
-            method: 'put',
-            url: url,
-            data: data,
-        })
+        const url = `/tasks/${this.state.activeTask.id}`
+        // Axios({
+        //     method: 'put',
+        //     url: url,
+        //     data: data,
+        // })
     }
 
     addNewTask() {
@@ -122,7 +125,7 @@ class Dashboard extends React.Component {
                     markTaskComplete={this.markTaskComplete}
                     />
                 </main>
-        {activeTask ? <EditModal task={activeTask} setActiveTask={this.setActiveTask} clearActiveTask={this.clearActiveTask} deleteTask={() => this.deleteTask(activeTask)} editTask={this.editTask}/> : "" }
+                {activeTask ? <EditModal task={tasks.filter(task => task.id === activeTask).pop()} setActiveTask={this.setActiveTask} clearActiveTask={this.clearActiveTask} deleteTask={() => this.deleteTask(activeTask)} editTask={this.editTask}/> : "" }
             </section>
         )
     }

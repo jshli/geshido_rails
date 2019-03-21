@@ -9,7 +9,7 @@
   get '/sign-up', to: 'users#index'
   resources :projects
   resources :timers
-  get '/api/timers/:id', to: 'timers#show'
+  get '/api/timers/:id', to: 'timers#index'
   put '/timers/:id/stop', to: 'timers#stop'
   resources :tasks
   get '/api/tasks', to: 'tasks#show'
