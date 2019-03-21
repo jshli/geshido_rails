@@ -24,11 +24,25 @@ class Dashboard extends React.Component {
     }
 
     userInput = event => {
-        console.log(event.target.value)
         this.setState({
             userInput: event.target.value
         })
     }
+
+    componentDidUpdate(prevState) {
+        const {currentMode, userInput} = this.state
+        if (userInput !== prevState && userInput.length > 0 && currentMode === "tasks") {
+
+            this.setState({
+                currentMode: "create task",
+            })
+        } else if (userInput !== prevState && userInput.length < 1 && currentMode === "create task") {
+            this.setState({
+                currentMode: "tasks"
+            })
+        }
+    }
+
 
     setActiveTask = task => {
         if (this.state.activeTask !== ""){
@@ -85,8 +99,10 @@ class Dashboard extends React.Component {
 
     addNewItem = event => {
         event.preventDefault();
-        event.target.value = "";
-        if (this.state.currentMode === "tasks"){
+        this.setState({
+            userInput: ""
+        })
+        if (this.state.currentMode === "create task"){
             let url = '/tasks'
             const data = {name: this.state.userInput, user_id: this.state.user.id, is_completed: false}
             fetch(url, {
@@ -140,15 +156,15 @@ class Dashboard extends React.Component {
 
 
     render () {
-        const {user, projects, tasks, activeTask, isInputActive, currentMode} = this.state;
+        const {user, projects, tasks, activeTask, isInputActive, currentMode, greeting, subheading} = this.state;
         if (currentMode == "tasks") {
             return (
                 <section className={`dashboard ${activeTask !== "" ? `dashboard--3col`: ``}`}>
                     <Sidebar projects={projects} />
                     <main className={`${activeTask === "" ? "main" : "main--shrink"}`}>
                         <CreateInput
-                        greeting={this.state.greeting}
-                        subheading={this.state.subheading} 
+                        greeting={greeting}
+                        subheading={subheading} 
                         user={user}
                         userInput={this.userInput}
                         addNewItem={this.addNewItem}
@@ -172,8 +188,8 @@ class Dashboard extends React.Component {
                     <Sidebar projects={projects} />
                     <main className="main--full">
                         <CreateInput
-                        greeting={this.state.greeting}
-                        subheading={this.state.subheading} 
+                        greeting={greeting}
+                        subheading={subheading} 
                         user={user}
                         userInput={this.userInput}
                         addNewItem={this.addNewItem}
@@ -183,14 +199,14 @@ class Dashboard extends React.Component {
                     </main>
                 </section>
             )
-        } else {
+        } else if (currentMode == "projects") {
             return (
                 <section className={`dashboard ${activeTask !== "" ? `dashboard--3col`: ``}`}>
                     <Sidebar projects={projects} />
                     <main className={`${activeTask === "" ? "main" : "main--shrink"}`}>
                         <CreateInput
-                        greeting={this.state.greeting}
-                        subheading={this.state.subheading} 
+                        greeting={greeting}
+                        subheading={subheading} 
                         user={user}
                         userInput={this.userInput}
                         addNewItem={this.addNewItem}
@@ -205,6 +221,25 @@ class Dashboard extends React.Component {
                         />
                     </main>
                     {activeTask ? <EditModal task={tasks.filter(task => task.id === activeTask).pop()} setActiveTask={this.setActiveTask} clearActiveTask={this.clearActiveTask} deleteTask={() => this.deleteTask(activeTask)} editTask={this.editTask}/> : "" }
+                </section>
+            )
+        } else {
+            return (
+                <section className={`dashboard ${activeTask !== "" ? `dashboard--3col`: ``}`}>
+                    <Sidebar projects={projects} />
+                    <main className={`${activeTask === "" ? "main" : "main--shrink"}`}>
+                        <CreateInput
+                        greeting={greeting}
+                        subheading={subheading} 
+                        user={user}
+                        userInput={this.userInput}
+                        addNewItem={this.addNewItem}
+                        isInputActive={isInputActive}
+                        handleFocus={this.handleFocus} 
+                        currentMode = {currentMode}
+                        projects = {projects}
+                        />
+                    </main>
                 </section>
             )
         }

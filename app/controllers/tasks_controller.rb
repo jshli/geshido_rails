@@ -18,6 +18,11 @@ class TasksController < ApplicationController
             task.is_completed = params[:is_completed]
             task.total_time = 0
             if task.save
+                log = Log.new
+                log.description = "Task created"
+                log.user_id = current_user.id
+                log.task_id = task.id
+                log.save
                 render json: task
             else
                 render json: {error: task.errors.full_messages, status: 500}.to_json
@@ -32,6 +37,11 @@ class TasksController < ApplicationController
             task = Task.find(params[:id])
             task.is_completed = !task.is_completed
             if task.save
+                log = Log.new
+                log.description = "Task completed"
+                log.user_id = current_user.id
+                log.task_id = task.id
+                log.save
                 render json: task
             else
                 render json: {error: task.errors.full_messages, status: 500}.to_json

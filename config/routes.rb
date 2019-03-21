@@ -1,4 +1,6 @@
  Rails.application.routes.draw do
+  resources :logs
+  get '/api/logs/:id', to:'logs#show'
   get '/dashboard', to: 'dashboard#index'
   get 'home/index'
   get '/', to: 'home#index'

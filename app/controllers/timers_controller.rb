@@ -20,6 +20,11 @@ class TimersController < ApplicationController
             task = Task.find(timer.task_id)
             task.current_timer_id = timer.id
             task.save
+            log = Log.new
+            log.description = "Timer started "
+            log.user_id = current_user.id
+            log.task_id = task.id
+            log.save
             render json: timer
         else
             render json: {error: timer.errors.full_messages, status: 500}.to_json
@@ -36,6 +41,10 @@ class TimersController < ApplicationController
             task.current_timer_id = nil
             task.total_time = task.total_time += timer.total_time
             task.save
+            log = Log.new
+            log.description = "Timer stopped"
+            log.user_id = current_user.id
+            log.task_id = task.id
         else
             render json: {error: timer.errors.full_messages, status: 500}.to_json
         end
