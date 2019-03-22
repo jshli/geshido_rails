@@ -15,9 +15,17 @@ export default function TaskList(props) {
  
     const { tasks, markTaskComplete, setActiveTask } = props
     // const { tasks } = this.props
-    return (
-        <div>
-            {tasks.map(task => <Task key={task.id} task={task} markTaskComplete={() => markTaskComplete(task)} setActiveTask={() => setActiveTask(task)}/>)}
-        </div>
-    )
+    if (tasks.length < 1) {
+        return(
+            <div>
+                <p>Hey, looks like you're done for the day.</p>
+            </div>
+        )
+    } else {
+        return (
+            <div>
+                {tasks.map(task => <Task key={task.id} task={task} markTaskComplete={() => markTaskComplete(task)} setActiveTask={() => setActiveTask(task)}/>)}
+            </div>
+        )
+    }
 }
