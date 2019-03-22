@@ -17,7 +17,7 @@ export default function TaskList(props) {
     // const { tasks } = this.props
     if (tasks.length < 1) {
         return(
-            <div>
+            <div className="empty-list">
                 <p>Hey, looks like you're done for the day.</p>
             </div>
         )
