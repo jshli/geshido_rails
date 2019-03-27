@@ -11,6 +11,7 @@
   get '/sign-up', to: 'users#index'
   resources :projects
   get '/api/projects', to: 'projects#show'
+  get '/api/projects/:id', to: 'projects#project'
   resources :timers
   get '/api/timers/:id', to: 'timers#index'
   put '/timers/:id/stop', to: 'timers#stop'

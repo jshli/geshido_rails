@@ -200,7 +200,6 @@ input {
   }
   .main--full {
     @extend %flex-center-everything--column;
-    text-align: center;
     align-items: stretch;
   }
 
@@ -290,117 +289,7 @@ input {
   }
 }
 
-.edit-modal {
-  padding: 3rem 0 0 2rem;
-  .check {
-    border: 2px black solid;
-    height: 1.5rem;
-    width: 1.5rem;
-    border-radius: 1000px;
-    padding: 0;
-    transition: all ease 0.3s;
-    @extend %flex-center-everything--column;
-  }
 
-  .check--completed {
-    background-color: black
-  }
-  .logs-wrap {
-    max-height: 10rem;
-    overflow: scroll;
-  }
-  input[type=checkbox] {
-    height: 100%;
-    width: 100%;
-    opacity: 0;
-  }
-
-  .edit-wrap {
-    position: sticky;
-    top: 1rem;
-    padding: 2rem;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-    border-top: 3px solid black;
-  }
-  input[type=text] {
-    border:none
-  }
-  .divider {
-    margin: 1rem 0;
-    border-bottom: 1px solid rgba(0,0,0,0.10)
-  }
-  input::placeholder {
-    color: black;
-  }
-  .task-name {
-    font-size: 1.5rem;
-    height: 2rem;
-    margin: 1.5rem 0;
-    color: black !important;
-    width: 100%
-  }
-  .utility-menu {
-    position: absolute;
-    top: 2rem;
-    right: 2rem;
-    display: flex;
-    justify-content: space-between;
-    z-index: 2;
-    .delete-btn {
-      @extend %button-reset;
-      transition: all ease 0.3s;
-      color: rgba(0,0,0,0.5);
-      font-size: 1rem;
-    }
-    .delete-btn:hover {
-      color: red;
-    }
-  }
-  .content-wrap {
-    @extend %flex-center-la--row;
-    p {
-      margin-bottom: 0;
-    }
-  }
-  .content-wrap > * {
-    margin-right: 1rem;
-    color: rgba(0,0,0,0.7);
-  }
-  textarea {
-    width: 100%;
-    border: none;
-    box-shadow: none;
-    outline: none;
-    font-size: 1rem;
-    padding: 0.5rem;
-    border: 1px solid rgba(0, 0, 0, 0);
-    transition: all ease 0.3s;
-  }
-  textarea:active, textarea:focus {
-    border: 1px solid rgba(0,0,0,0.1);
-  }
-}
-.text-wrap{
-  display: grid;
-  overflow: scroll;
-  p, h4 {
-    margin-bottom: 0;
-    line-height: 1.5rem;
-  }
-}
-.timer-wrap {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  .fa-clock {
-    transform: translateX(0) rotatez(0);
-    transition: all ease 0.3s;
-  }
-  .active {
-    color: red;
-    transform: translateX(-2rem) rotateZ(-360deg)
-  }
-}
 
 .project-list {
   display: grid;
@@ -576,6 +465,132 @@ input {
     p {
       color: black;
     }
+  }
+}
+
+.edit-modal {
+  padding: 3rem 0 0 2rem;
+  .check {
+    border: 2px black solid;
+    height: 1.5rem;
+    width: 1.5rem;
+    border-radius: 1000px;
+    padding: 0;
+    transition: all ease 0.3s;
+    @extend %flex-center-everything--column;
+  }
+  .selector {
+    margin: 0 0 1.5rem 0;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+    p {
+      font-size: 1.25rem;
+      color: black
+    }
+  }
+  .dropdown-menu {
+    width: 100%
+  }
+
+
+  .check--completed {
+    background-color: black
+  }
+  .logs-wrap {
+    max-height: 10rem;
+    overflow: scroll;
+  }
+  input[type=checkbox] {
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+  }
+
+  .edit-wrap {
+    position: sticky;
+    top: 1rem;
+    padding: 2rem;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    border-top: 3px solid black;
+  }
+  input[type=text] {
+    border:none
+  }
+  .divider {
+    margin: 1rem 0;
+    border-bottom: 1px solid rgba(0,0,0,0.10)
+  }
+  input::placeholder {
+    color: black;
+  }
+  .task-name {
+    font-size: 1.5rem;
+    height: 2rem;
+    margin: 1.5rem 0;
+    color: black !important;
+    width: 100%
+  }
+  .utility-menu {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    display: flex;
+    justify-content: space-between;
+    z-index: 2;
+    .delete-btn {
+      @extend %button-reset;
+      transition: all ease 0.3s;
+      color: rgba(0,0,0,0.5);
+      font-size: 1rem;
+    }
+    .delete-btn:hover {
+      color: red;
+    }
+  }
+  .content-wrap {
+    @extend %flex-center-la--row;
+    p {
+      margin-bottom: 0;
+    }
+  }
+  .content-wrap > * {
+    margin-right: 1rem;
+    color: rgba(0,0,0,0.7);
+  }
+  textarea {
+    width: 100%;
+    border: none;
+    box-shadow: none;
+    outline: none;
+    font-size: 1rem;
+    padding: 0.5rem;
+    border: 1px solid rgba(0, 0, 0, 0);
+    transition: all ease 0.3s;
+  }
+  textarea:active, textarea:focus {
+    border: 1px solid rgba(0,0,0,0.1);
+  }
+}
+.text-wrap{
+  display: grid;
+  overflow: scroll;
+  p, h4 {
+    margin-bottom: 0;
+    line-height: 1.5rem;
+  }
+}
+.timer-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .fa-clock {
+    transform: translateX(0) rotatez(0);
+    transition: all ease 0.3s;
+  }
+  .active {
+    color: red;
+    transform: translateX(-2rem) rotateZ(-360deg)
   }
 }
 

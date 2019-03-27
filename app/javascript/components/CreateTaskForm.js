@@ -55,9 +55,9 @@ export default function CreateTaskForm(props) {
             })} onFocus={handleFocus} onBlur={handleBlur}>
                 <button className="add-btn"><i className="fas fa-plus"></i></button>
                 <input className="task-input" type="text" onChange={handleInput} 
-                placeholder="What do you need done?" 
+                placeholder={currentMode === "tasks" ? "What do you need done?" : "New project name" }
                 value={input} />
-                
+
                 {currentMode === "create task" ? 
                     <div className="new-task-extension">
                         <p>

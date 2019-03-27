@@ -17,6 +17,11 @@ class ProjectsController < ApplicationController
         @tasks = current_user.tasks
         @projects = current_user.projects
     end
+
+    def project 
+        project = Project.find(params[:id])
+        render json: project
+    end
     
     def create
         project = Project.new

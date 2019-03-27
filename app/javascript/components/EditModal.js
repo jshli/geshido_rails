@@ -3,12 +3,14 @@ import Axios from "axios"
 import Moment from "moment"
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
-
+import DropdownMenu from './DropdownMenu'
 
 const LOGS = []; 
+const PROJECT = ""
 export default function EditModal(props){
-
     const [logs, setLogs] = useState(LOGS)
+    const [taskProject, setTaskProject] = useState(PROJECT)
+
     useEffect(() => {
         const fetchData = async() =>{
             const url = `/api/logs/${props.task.id}`
@@ -18,9 +20,27 @@ export default function EditModal(props){
         fetchData();
     }, [props, setLogs])
 
+    useEffect(() => {
+        if (props.task.project_id) {
+        const fetchProject = async() => {
+                const url = `/api/projects/${props.task.project_id}`
+                const result = await Axios.get(url)
+                setTaskProject(result.data)
+            }
+            fetchProject()
+        }
+    }, [props, setTaskProject])
+
     const handleChange = event => {
-        console.log('hi')
         props.editTask(event.target.name, event.target.value)
+    }
+
+    const editProject = project => {
+        props.editTask("project_id", `${project ? project.id : ""}`)
+    }
+
+    const handleCheck = () => {
+        props.editTask("is_completed", !props.task.is_completed)
     }
 
     const handleDayClick = day => {
@@ -47,10 +67,6 @@ export default function EditModal(props){
         let rest = minutes % 60
         return minutes > 60 ? `${hours} h ${("0" + rest).slice(-2)} m` : `${("0" + rest).slice(-2)} m`
     }
-
-    const formatDay = date => {
-
-    }
     
     const { task } = props;
 
@@ -68,12 +84,21 @@ export default function EditModal(props){
                 </div>
             <form onSubmit={handleSubmit}>
                 <div className='content-wrap'>
-                    <div className={`check ${task.is_completed ? `check--completed` : "" }`}>
-                        <input onChange={handleChange} type="checkbox" name="is_completed" id="" checked = {task.is_completed ? true : false }/>
+                    <div onClick={handleCheck} className={`check ${task.is_completed ? `check--completed` : "" }`}>
+                        {/* <input onChange={handleChange} type="checkbox" name="is_completed" id="" checked = {task.is_completed ? true : false }/> */}
                     </div>
                     <input onChange={handleChange} className="task-name" type="text" name="name"  value={task.name}  />
                 </div>
-                <p>Project name</p>
+                <div>
+                    <p>Project</p>
+                    <DropdownMenu 
+                        data={props.projects}
+                        activeOption={taskProject ? taskProject.name : "None"}
+                        handleNone={true}
+                        handleClick={editProject}
+                        
+                    />
+                </div>
                     <div className='content-wrap'>
                         <p>{formatTime(task.total_time)} minutes so far</p>
                         

@@ -71,7 +71,9 @@ class Dashboard extends React.Component {
                 name: previousTask.name,
                 description: previousTask.description,
                 start_date: previousTask.start_date,
-                due_date: previousTask.due_date
+                due_date: previousTask.due_date,
+                is_completed: task.is_completed,
+                project_id: task.project_id
         })
         .then(res => this.setState({
             activeTask: task.id
@@ -90,8 +92,11 @@ class Dashboard extends React.Component {
             name: task.name,
             description: task.description,
             start_date: task.start_date,
-            due_date: task.due_date
+            due_date: task.due_date,
+            is_completed: task.is_completed,
+            project_id: task.project_id
         })
+        .then(res => console.log(res))
         .then(res => this.setState({
             activeTask: ""
         }))
@@ -141,7 +146,9 @@ class Dashboard extends React.Component {
             Axios.post(url, {
                 name: this.state.input, 
                 user_id: this.state.user.id
-            })
+            }).then(res => this.setState({
+
+            }))
         }
     }
 
@@ -190,6 +197,7 @@ class Dashboard extends React.Component {
                                 sortModes={SORT_MODES}
                                 filterModes={FILTER_MODES}
                                 currentSortMode={currentSortMode}
+                                currentMode = {currentMode}
                                 currentFilterMode={currentFilterMode}
                                 changeSortMode={this.changeSortMode}
                                 changeFilterMode={this.changeFilterMode}
@@ -224,7 +232,13 @@ class Dashboard extends React.Component {
                         "" }
                         
                     </main>
-                    {activeTask ? <EditModal task={tasks.filter(task => task.id === activeTask).pop()} setActiveTask={this.setActiveTask} clearActiveTask={this.clearActiveTask} deleteTask={() => this.deleteTask(activeTask)} editTask={this.editTask}/> : "" }
+                    {activeTask ? <EditModal task={tasks.filter(task => task.id === activeTask).pop()} 
+                    setActiveTask={this.setActiveTask} 
+                    clearActiveTask={this.clearActiveTask} 
+                    deleteTask={() => this.deleteTask(activeTask)} 
+                    editTask={this.editTask}
+                    projects={projects}
+                    /> : "" }
                 </section>
 
             )
@@ -235,8 +249,8 @@ class Dashboard extends React.Component {
                     <main className="main--full">
                         <div>
                             <Greeter 
-                            greeting={greeting}
-                            subheading={subheading} 
+                            greeting="Create a new project"
+                            subheading="What are we creating today?"
                             user={user}
                             sortModes={SORT_MODES}
                             filterModes={FILTER_MODES}
@@ -245,6 +259,7 @@ class Dashboard extends React.Component {
                             changeSortMode={this.changeSortMode}
                             changeFilterMode={this.changeFilterMode}
                             tasks={tasks}
+                            currentMode={currentMode}
                             />
                             <CreateInputForm
                             greeting={greeting}

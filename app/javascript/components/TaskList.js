@@ -33,7 +33,10 @@ export default function TaskList(props) {
                         return !task.is_completed
                     }
                 })
-                .map(task => <Task key={task.id} task={task} markTaskComplete={() => markTaskComplete(task)} setActiveTask={() => setActiveTask(task)}/>)
+                .map(task => <Task key={task.id} 
+                    task={task} 
+                    markTaskComplete={() => markTaskComplete(task)} 
+                    setActiveTask={() => setActiveTask(task)}/>)
                 }
             </div>
         )
