@@ -19,7 +19,7 @@ export default function TaskList(props) {
                             return new Date(b.created_at) - new Date(a.created_at)
                     } else if (currentSortMode === "Alphabetical") {
                             return a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1
-    
+
                     } else {
                             return new Date(a.created_at) - new Date(b.created_at)
                         }

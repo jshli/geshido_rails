@@ -65,20 +65,14 @@ export default function Task(props) {
         else {
             const url = `/timers/${currentTimer.id}/stop`
             Axios.put(url, {
-                timer: props.task.id
+                // timer: props.task.id
             })
             .then(res => updateTotalTime(totalTime + res.data.total_time))
-            .then(() => setCurrentTimer(null))
+            .then(res => console.log(res))
+            .then(setCurrentTimer(null))
+            .then(setCurrentTimerId(null))
         }
     }
-
-    // componentDidUpdate(prevProps) {
-    //     if (this.props.task !== prevProps.task){
-    //         this.setState({
-    //             task: this.props.task
-    //         })
-    //     }
-    // }
     
     const formatTime = minutes => {
         let hours = Math.floor(minutes / 60)
@@ -97,8 +91,8 @@ export default function Task(props) {
             <form onSubmit={markTaskComplete} className="check-box">
                 <button className={`check ${isComplete ? `check--completed` : ""}`}></button>
             </form>
-            <div onClick={handleClick} className="details__wrap">
-                <div className="text-wrap">
+            <div className="details__wrap">
+                <div onClick={handleClick} className="text-wrap">
                     {currentProject ? <p>{currentProject.name}</p> : ""}
                     <h4>{`${task.name}`}</h4>
                     <div className="small-details-grid">
@@ -108,7 +102,7 @@ export default function Task(props) {
                         </div>
                     </div>
                 </div>
-                <Timer toggleTimer={toggleTimer} currentTimer={props.currentTimer}/>
+                <Timer toggleTimer={toggleTimer} currentTimer={currentTimer}/>
             </div>
         </div>
     )

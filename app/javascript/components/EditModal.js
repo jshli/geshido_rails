@@ -22,11 +22,11 @@ export default function EditModal(props){
 
     useEffect(() => {
         if (props.task.project_id) {
-        const fetchProject = async() => {
-                const url = `/api/projects/${props.task.project_id}`
-                const result = await Axios.get(url)
-                setTaskProject(result.data)
-            }
+            const fetchProject = async() => {
+                    const url = `/api/projects/${props.task.project_id}`
+                    const result = await Axios.get(url)
+                    setTaskProject(result.data)
+                }
             fetchProject()
         }
     }, [props, setTaskProject])

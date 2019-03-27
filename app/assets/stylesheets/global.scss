@@ -588,8 +588,11 @@ input {
     transform: translateX(0) rotatez(0);
     transition: all ease 0.3s;
   }
+  p {
+    margin-bottom: 0;
+  }
   .active {
-    color: red;
+    color: #FA3E3D;
     transform: translateX(-2rem) rotateZ(-360deg)
   }
 }

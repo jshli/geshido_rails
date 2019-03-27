@@ -5,9 +5,7 @@ import TaskUtilitiesMenu from './TaskUtilitiesMenu'
 export default function Greeter(props) {
 
     const {user, greeting, subheading} = props
-
     
-
     return (
         <div>
             <div className="greeting-header-wrap">
