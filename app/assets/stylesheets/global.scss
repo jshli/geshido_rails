@@ -1,3 +1,5 @@
+@import "../node_modules/react-day-picker/lib/style";
+
 /* Utility CSS Styles */
 %flex-hc-stretch--column {
   display: flex;
@@ -34,9 +36,12 @@
     font-size: 1rem;
     border: none;
     border: 1px solid black;
-    color: black;
+    color: black !important;
     transition: all ease 0.3s;
     align-self: flex-start;
+    text-align: center;
+    font-family: 'Source Sans Pro', sans-serif;
+    cursor: pointer;
 }
 $soft-shadow: 0  20px 40px rgba(0,0,0,0.10);
 $purple : #5C4B7C;
@@ -63,9 +68,13 @@ p, label {
   font-family: 'Source Sans Pro', sans-serif;
 }
 
-h1, h2, h3, h4 {
+a {
   font-family: 'Source Sans Pro', sans-serif;
-  font-weight: bold;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Muli', sans-serif;
+  font-weight: lighter;
 }
 
 h1, h2, h3, h4, p {
@@ -131,6 +140,11 @@ input {
     color: white;
     background-color: black
   }
+}
+
+.divider {
+  margin: 1rem 0;
+  border-bottom: 1px solid rgba(0,0,0,0.10)
 }
 
 .check {
@@ -259,7 +273,6 @@ input {
     align-items: center;
     padding:1.5rem 3rem;
     overflow: hidden;
-    
   }
 
   .small-details-grid {
@@ -288,8 +301,13 @@ input {
     transition: all ease 0.3s;
     @extend %flex-center-everything--column;
   }
+
   .check--completed {
     background-color: black
+  }
+  .logs-wrap {
+    max-height: 10rem;
+    overflow: scroll;
   }
   input[type=checkbox] {
     height: 100%;
@@ -319,6 +337,7 @@ input {
     height: 2rem;
     margin: 1.5rem 0;
     color: black !important;
+    width: 100%
   }
   .utility-menu {
     position: absolute;
@@ -338,7 +357,10 @@ input {
     }
   }
   .content-wrap {
-    @extend %flex-center-la--row
+    @extend %flex-center-la--row;
+    p {
+      margin-bottom: 0;
+    }
   }
   .content-wrap > * {
     margin-right: 1rem;
@@ -359,11 +381,11 @@ input {
   }
 }
 .text-wrap{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  p {
+  display: grid;
+  overflow: scroll;
+  p, h4 {
     margin-bottom: 0;
+    line-height: 1.5rem;
   }
 }
 .timer-wrap {
@@ -404,33 +426,53 @@ input {
 
 .new-task-extension {
   padding: 2rem 3rem 3rem 0;
-  .due-date-group {
+  .due-date-grouping {
     display: grid;
-    grid-column-gap: repeat(3,auto);
+    grid-auto-flow: column;
+    margin-bottom: 3rem;
+    grid-column-gap: 1rem;
+    grid-template-columns: repeat(3,min-content);
   }
-  button {
-    @extend %button;
-    color: black !important;
-    padding: 0.5rem 2rem;
+
+  .button--active {
+    color: white;
+    background: black;
   }
   p {
     color: black;
     font-weight: bold;
   }
-  button:hover {
+  .button:hover {
     color: white !important;
     background: black;
   }
   .check {
     display: inline-block
   }
-  .due-date-grouping {
-    display: grid;
-    grid-template-columns: repeat(3,1fr);
-    grid-column-gap: 0.5rem;
-    margin-bottom: 3rem;
+  .hidden {
+    display: none;
+  }
+  .datepicker-wrapper {
+    position: absolute;
+    top: 14rem;
+  }
+  .custom_date__wrapper {
+    position: relative;
   }
 
+  .button {
+    @extend %button;
+    padding: 0.5rem 1.5rem;
+    input[type=radio]{
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      top: 0;
+      left: 0;
+      opacity: 0;
+    }
+  }
 }
 .project-wrap {
   display: grid;
@@ -438,12 +480,129 @@ input {
   grid-column-gap: 1rem;
 }
 
-.radial-graph {
-  height: 3rem;
-  width: 3rem;
-  border-radius: 1000px;
-  border: solid black 3px;
-}
 .empty-list {
   padding: 2rem;
+}
+
+.greeting-header-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  h1 {
+    margin-bottom: 0;
+  }
+  .fa-ellipsis-h {
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+  .dropdown-wrap {
+    align-self: center;
+  }
+  .hover {
+    opacity: 0.5;
+  }
+  .pressed {
+    opacity: 1
+  }
+  .utilities-wrap {
+    display: grid;
+    grid-column-gap: 1rem;
+    grid-auto-flow: column
+  }
+  
+}
+.dropdown-wrap {
+  position: relative;
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  position: absolute;
+  display: none;
+  flex-direction: column;
+  right: 0;
+  background: white;
+  z-index: 2;
+  box-shadow: $soft-shadow;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  p {
+    margin: 0 1.5rem 1rem 1.5rem;
+    color: rgba(0,0,0,0.5)
+  }
+  .fa-circle {
+    font-size: 4px;
+    align-self: center;
+
+  }
+  a {
+    padding: 1rem 1.5rem;
+    transition: all ease 0.3s;
+    display: grid;
+    grid-column-gap: 0.5rem;
+    grid-auto-flow: column;
+    grid-template-columns: max-content auto
+
+  }
+  a:hover {
+    color: white;
+    background: black;
+  }
+}
+.dropdown-menu--active {
+  display: flex;
+}
+
+.selector-wrap {
+  position: relative;
+  .selector {
+    border: 1px solid rgba(0,0,0,0.1);
+    padding: 0.5rem 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+    margin: 0 1.5rem;
+    transition: all 0.3s ease;
+    min-width: 25ch;
+    p {
+      margin: 0;
+      font-weight: bold
+    }
+  }
+  .selector--active {
+    border: 1px solid black;
+    p {
+      color: black;
+    }
+  }
+}
+
+.DayPicker-wrapper {
+  font-family: 'Source Sans Pro', sans-serif;
+  .DayPicker-Day--today{
+    color: black;
+  }
+  .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside){
+    background-color: black
+  }
+}
+
+.radial-chart {
+  position: relative;
+  display: inline-block;
+  transition: all 0.3s ease-in;
+}
+.radial-chart.no-progress .radial-chart-progress {
+  opacity: 0;
+}
+.radial-chart-total {
+  opacity: 0.3;
+}
+.radial-chart-progress {
+  transform: rotate(90deg);
+  transform-origin: center;
+  transition: all 0.6s cubic-bezier(0.58, 0.16, 0.5, 1.14);
+  transition-delay: 0.3s;
 }

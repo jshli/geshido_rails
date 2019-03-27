@@ -1,6 +1,9 @@
 import React, { useState, useEffect} from "react"
 import Axios from "axios"
 import Moment from "moment"
+import DayPickerInput from 'react-day-picker/DayPickerInput';
+import 'react-day-picker/lib/style.css';
+
 
 const LOGS = []; 
 export default function EditModal(props){
@@ -16,7 +19,12 @@ export default function EditModal(props){
     }, [props, setLogs])
 
     const handleChange = event => {
+        console.log('hi')
         props.editTask(event.target.name, event.target.value)
+    }
+
+    const handleDayClick = day => {
+        props.editTask("due_date", day)
     }
 
     const deleteTask = (e) =>{
@@ -39,10 +47,11 @@ export default function EditModal(props){
         let rest = minutes % 60
         return minutes > 60 ? `${hours} h ${("0" + rest).slice(-2)} m` : `${("0" + rest).slice(-2)} m`
     }
+
+    const formatDay = date => {
+
+    }
     
-
-
-
     const { task } = props;
 
     return(
@@ -69,7 +78,14 @@ export default function EditModal(props){
                         <p>{formatTime(task.total_time)} minutes so far</p>
                         
                         <div className='content-wrap'>
-                            <input onChange={handleChange} type="date" name="due_date" value={task.due_date} />
+                            <DayPickerInput  
+                            onDayChange={handleDayClick}
+                            inputProps={{ 
+                                name: 'due_date', 
+                                value: `${task.due_date}`,  
+                                placeholder:`${task.due_date ? Moment(task.due_date).format('DD MMMM') : `Select Due Date`}` }}
+                                />
+                            {/* <input onChange={handleChange} type="date" name="due_date" value={task.due_date} /> */}
                             <label>Due Date</label>
                         </div>
                     </div>
@@ -79,9 +95,11 @@ export default function EditModal(props){
                     <textarea onChange={handleChange} placeholder={task.description === null ? "Description" : ""} name="description" value={task.description !== null ? task.description: ""}></textarea>
                 </div>
                 <div className="divider"></div>
-                {logs.map(log => {
-                    return <p>{`${log.description} at ${Moment(log.created_at).format("dddd, MMMM Do")}`} </p>
-                }).reverse()}
+                <div className="logs-wrap">
+                    {logs.map(log => {
+                        return <p key={log.id}>{`${log.description}. ${Moment(log.created_at).format("dddd, MMMM Do")}`} </p>
+                    }).reverse()}
+                </div>
             </form>
             </div>
         </div>

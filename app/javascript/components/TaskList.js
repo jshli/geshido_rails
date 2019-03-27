@@ -1,20 +1,9 @@
-import React from "react"
+import React, {useState} from "react"
 import Task from './Task'
 export default function TaskList(props) {
-    
-    // componentWillReceiveProps(nextProps) {
-    //     this.setState({
-    //         tasks:nextProps.tasks
-    //     })
-    // }
-    // handleSubmit(event){
-    //     event.preventDefault()
-    //     this.props.addNewTask()
-    // }
-
  
-    const { tasks, markTaskComplete, setActiveTask } = props
-    // const { tasks } = this.props
+    const { tasks, markTaskComplete, setActiveTask, currentSortMode, currentFilterMode } = props
+
     if (tasks.length < 1) {
         return(
             <div className="empty-list">
@@ -24,7 +13,28 @@ export default function TaskList(props) {
     } else {
         return (
             <div>
-                {tasks.map(task => <Task key={task.id} task={task} markTaskComplete={() => markTaskComplete(task)} setActiveTask={() => setActiveTask(task)}/>)}
+                {tasks
+                .sort((a,b) => {
+                    if (currentSortMode === "Newest") {
+                            return new Date(b.created_at) - new Date(a.created_at)
+                    } else if (currentSortMode === "Alphabetical") {
+                            return a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1
+    
+                    } else {
+                            return new Date(a.created_at) - new Date(b.created_at)
+                        }
+                    }) 
+                .filter(task => {
+                    if (currentFilterMode === "All") {
+                        return task
+                    } else if (currentFilterMode === "Completed Only") {
+                        return task.is_completed
+                    } else if (currentFilterMode === "Uncompleted Only") {
+                        return !task.is_completed
+                    }
+                })
+                .map(task => <Task key={task.id} task={task} markTaskComplete={() => markTaskComplete(task)} setActiveTask={() => setActiveTask(task)}/>)
+                }
             </div>
         )
     }

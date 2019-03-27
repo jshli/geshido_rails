@@ -3,8 +3,12 @@ import Sidebar from "./Sidebar"
 import TaskList from "./TaskList"
 import EditModal from "./EditModal"
 import ProjectList from "./ProjectList"
+import Greeter from "./Greeter"
 import Axios from 'axios'
-import CreateInput from "./CreateInput";
+import CreateInputForm from "./CreateTaskForm";
+
+const FILTER_MODES = ["All", "Completed Only", "Uncompleted Only"]
+const SORT_MODES = ["Newest", "Oldest", "Alphabetical"]
 
 class Dashboard extends React.Component {
     constructor(props){
@@ -14,29 +18,44 @@ class Dashboard extends React.Component {
             user: JSON.parse(this.props.user),
             projects: JSON.parse(this.props.projects),
             tasks: JSON.parse(this.props.tasks),
-            userInput: "",
+            input: "",
+            dueDate:"",
             activeTask: "",
-            isInputActive: false,
             currentMode: this.props.currentMode,
             greeting: this.props.greeting,
-            subheading: this.props.subheading
+            subheading: this.props.subheading,
+            currentSortMode: "Newest",
+            currentFilterMode: "All"
         }
     }
 
-    userInput = event => {
+
+    handleInput = event => {
         this.setState({
-            userInput: event.target.value
+            input: event.target.value
+        })
+    }
+
+
+    changeSortMode = mode => {
+        this.setState({
+            currentSortMode:mode
+        })
+    }
+
+    changeFilterMode = mode => {
+        this.setState({
+            currentFilterMode: mode
         })
     }
 
     componentDidUpdate(prevState) {
-        const {currentMode, userInput} = this.state
-        if (userInput !== prevState && userInput.length > 0 && currentMode === "tasks") {
-
+        const {currentMode, input} = this.state
+        if (input !== prevState && input.length > 0 && currentMode === "tasks") {
             this.setState({
-                currentMode: "create task",
+                currentMode: "create task"
             })
-        } else if (userInput !== prevState && userInput.length < 1 && currentMode === "create task") {
+        } else if (input !== prevState && input.length < 1 && currentMode === "create task") {
             this.setState({
                 currentMode: "tasks"
             })
@@ -91,20 +110,20 @@ class Dashboard extends React.Component {
         })
     }
 
-    handleFocus = () => {
+    setDueDate = value => {
         this.setState({
-            isInputActive: !this.state.isInputActive
+            dueDate: value
         })
     }
 
     addNewItem = event => {
         event.preventDefault();
         this.setState({
-            userInput: ""
+            input: ""
         })
         if (this.state.currentMode === "create task"){
             let url = '/tasks'
-            const data = {name: this.state.userInput, user_id: this.state.user.id, is_completed: false}
+            const data = {name: this.state.input, user_id: this.state.user.id, is_completed: false, due_date: this.state.dueDate}
             fetch(url, {
                 method: 'POST',
                 headers: {
@@ -116,19 +135,19 @@ class Dashboard extends React.Component {
             .then(res => this.setState({
                 tasks: [...this.state.tasks, res]
             }))
+            .then(() => this.sortTasks(this.state.tasks))
         } else if (this.state.currentMode === "create project") {
             let url = '/projects'
             Axios.post(url, {
-                name: this.state.userInput, 
+                name: this.state.input, 
                 user_id: this.state.user.id
             })
-            .then(res => console.log(res))
         }
     }
 
     deleteTask(task) {
         const url = `/tasks/${this.state.activeTask}`
-    Axios.delete(url)
+        Axios.delete(url)
         .then(this.setState({
             tasks: this.state.tasks.filter(t => t.id != this.state.activeTask)
         }))
@@ -156,27 +175,54 @@ class Dashboard extends React.Component {
 
 
     render () {
-        const {user, projects, tasks, activeTask, isInputActive, currentMode, greeting, subheading} = this.state;
-        if (currentMode == "tasks") {
+        const {user, projects, tasks, activeTask, isInputActive, currentMode, currentSortMode,currentFilterMode, greeting, subheading, input, dueDate} = this.state;
+        if (currentMode == "tasks" || currentMode == "create task") {
             return (
                 <section className={`dashboard ${activeTask !== "" ? `dashboard--3col`: ``}`}>
                     <Sidebar projects={projects} />
                     <main className={`${activeTask === "" ? "main" : "main--shrink"}`}>
-                        <CreateInput
-                        greeting={greeting}
-                        subheading={subheading} 
-                        user={user}
-                        userInput={this.userInput}
-                        addNewItem={this.addNewItem}
-                        isInputActive={isInputActive}
-                        handleFocus={this.handleFocus} 
-                        />
-                        <TaskList user={user} 
-                        projects={projects} 
-                        tasks={tasks} 
-                        setActiveTask = {this.setActiveTask}
-                        markTaskComplete={this.markTaskComplete}
-                        />
+                        <div>
+                            {currentMode == "tasks" ?
+                                <Greeter 
+                                greeting={greeting}
+                                subheading={subheading} 
+                                user={user}
+                                sortModes={SORT_MODES}
+                                filterModes={FILTER_MODES}
+                                currentSortMode={currentSortMode}
+                                currentFilterMode={currentFilterMode}
+                                changeSortMode={this.changeSortMode}
+                                changeFilterMode={this.changeFilterMode}
+                                tasks={tasks}
+                                />
+                            :
+                            ""}
+                            <CreateInputForm 
+                            greeting={greeting}
+                            subheading={subheading} 
+                            user={user}
+                            handleInput={this.handleInput}
+                            input = {input}
+                            addNewItem={this.addNewItem}
+                            isInputActive={isInputActive}
+                            currentMode = {currentMode}
+                            projects = {projects}
+                            dueDate = {dueDate}
+                            setDueDate = {this.setDueDate}
+                            />
+                        </div>
+                        {currentMode === "tasks" ?
+                            <TaskList user={user} 
+                            projects={projects} 
+                            tasks={tasks} 
+                            setActiveTask = {this.setActiveTask}
+                            markTaskComplete={this.markTaskComplete}
+                            currentSortMode = {currentSortMode}
+                            currentFilterMode = {currentFilterMode}
+                            />
+                        :
+                        "" }
+                        
                     </main>
                     {activeTask ? <EditModal task={tasks.filter(task => task.id === activeTask).pop()} setActiveTask={this.setActiveTask} clearActiveTask={this.clearActiveTask} deleteTask={() => this.deleteTask(activeTask)} editTask={this.editTask}/> : "" }
                 </section>
@@ -187,15 +233,29 @@ class Dashboard extends React.Component {
                 <section className={`dashboard ${activeTask !== "" ? `dashboard--3col`: ``}`}>
                     <Sidebar projects={projects} />
                     <main className="main--full">
-                        <CreateInput
-                        greeting={greeting}
-                        subheading={subheading} 
-                        user={user}
-                        userInput={this.userInput}
-                        addNewItem={this.addNewItem}
-                        isInputActive={isInputActive}
-                        handleFocus={this.handleFocus} 
-                        />
+                        <div>
+                            <Greeter 
+                            greeting={greeting}
+                            subheading={subheading} 
+                            user={user}
+                            sortModes={SORT_MODES}
+                            filterModes={FILTER_MODES}
+                            currentSortMode={currentSortMode}
+                            currentFilterMode={currentFilterMode}
+                            changeSortMode={this.changeSortMode}
+                            changeFilterMode={this.changeFilterMode}
+                            tasks={tasks}
+                            />
+                            <CreateInputForm
+                            greeting={greeting}
+                            subheading={subheading} 
+                            user={user}
+                            handleInput={this.handleInput}
+                            input = {input}
+                            addNewItem={this.addNewItem}
+                            isInputActive={isInputActive}
+                            />
+                        </div>
                     </main>
                 </section>
             )
@@ -204,15 +264,6 @@ class Dashboard extends React.Component {
                 <section className={`dashboard ${activeTask !== "" ? `dashboard--3col`: ``}`}>
                     <Sidebar projects={projects} />
                     <main className={`${activeTask === "" ? "main" : "main--shrink"}`}>
-                        <CreateInput
-                        greeting={greeting}
-                        subheading={subheading} 
-                        user={user}
-                        userInput={this.userInput}
-                        addNewItem={this.addNewItem}
-                        isInputActive={isInputActive}
-                        handleFocus={this.handleFocus} 
-                        />
                         <ProjectList user={user} 
                         projects={projects} 
                         tasks={tasks} 
@@ -228,14 +279,14 @@ class Dashboard extends React.Component {
                 <section className={`dashboard ${activeTask !== "" ? `dashboard--3col`: ``}`}>
                     <Sidebar projects={projects} />
                     <main className={`${activeTask === "" ? "main" : "main--shrink"}`}>
-                        <CreateInput
+                        <CreateInputForm
                         greeting={greeting}
                         subheading={subheading} 
                         user={user}
-                        userInput={this.userInput}
+                        handleInput={this.handleInput}
+                        input = {input}
                         addNewItem={this.addNewItem}
                         isInputActive={isInputActive}
-                        handleFocus={this.handleFocus} 
                         currentMode = {currentMode}
                         projects = {projects}
                         />
