@@ -35,6 +35,7 @@ export default function TaskList(props) {
                 })
                 .map(task => <Task key={task.id} 
                     task={task} 
+                    editTask = {props.editTask}
                     markTaskComplete={() => markTaskComplete(task)} 
                     setActiveTask={() => setActiveTask(task)}/>)
                 }

@@ -3,17 +3,16 @@ import Moment from "moment"
 import classNames from 'classnames'
 import TimerClock from './TimerClock'
 
+import TimerItem from './Blocks/Timer/Index'
+
 export default function Timer(props) {
     
     const { currentTimer } = props
     // currentTimer ? updateTime(currentTimer.start_time) : ""
     return (
-        <div className="timer-wrap">
-            <i onClick={props.toggleTimer} 
-                className={classNames("far fa-clock", {
-                    "active" : currentTimer
-                })}></i>
+        <TimerItem>
+            <TimerItem.Icon className="far fa-clock" onClick={props.toggleTimer} isActive={currentTimer}/>
             {currentTimer ? <TimerClock currentTimer={currentTimer}/> : ""}
-        </div>
+        </TimerItem>
     )
 }

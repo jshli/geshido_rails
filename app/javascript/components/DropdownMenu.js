@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useRef} from "react"
 import classNames from 'classnames'
+import Dropdown from "./Blocks/DropdownMenu/Index"
 
 export default function DropdownMenu(props) {
     const [menuOpen, setMenuOpen] = useState(false)
@@ -21,38 +22,46 @@ export default function DropdownMenu(props) {
           };
     }, []);
 
+    useEffect(() => {
+        setActiveOption(props.activeOption)
+    })
+    const handleNoneClick = () => {
+        setActiveOption("None")
+        props.handleClick()
+    }
+
+    const handleOptionClick = option => {
+        typeof option === "object" ? setActiveOption(option.name) : setActiveOption(option)
+        props.handleClick(option)
+    }
     
 
     return (
-        <div ref={dropdown} onClick={handleClick} className="selector-wrap">
-            <div onClick={() => setMenuOpen(!menuOpen)} className={classNames("selector", {
-                "selector--active" : menuOpen
-            })}>
-                <p>{props.activeOption ? `${props.activeOption}` : "Select One..."}</p>
+        <Dropdown ref={dropdown} onClick={handleClick} >
+            <Dropdown.Selector onClick={() => setMenuOpen(!menuOpen)} menuOpen={menuOpen} fullWidth={props.fullWidth}>
+                <p>{props.activeOption ? `${activeOption}` : "Select One..."}</p>
                 <i className="fas fa-chevron-down"></i>
-            </div>
-            <div className={classNames("dropdown-menu", {
-                'dropdown-menu--active' : menuOpen
-            })}>
-                {props.handleNone ? <a onClick={() => props.handleClick("")}>None</a> : ""}
+            </Dropdown.Selector>
+            <Dropdown.Menu menuOpen={menuOpen} fullWidth={props.fullWidth}>
+                {props.handleNone ? <Dropdown.Link onClick={handleNoneClick}>None</Dropdown.Link> : ""}
                 {props.data.map((option, index) => {
                     if (typeof option === "object") {
                         return (
-                            <a onClick={() => props.handleClick(option)} key={index}>
-                                {props.activeOption === option.name? <i className="fas fa-circle"></i> : ""}
+                            <Dropdown.Link onClick={() => handleOptionClick(option)} key={index}>
+                                {activeOption === option.name? <i className="fas fa-circle"></i> : ""}
                                 {option.name}
-                            </a>
+                            </Dropdown.Link>
                         )
                     } else {
                         return (
-                            <a onClick={() => props.handleClick(option)} key={index}>
+                            <Dropdown.Link onClick={() => handleOptionClick(option)} key={index}>
                                 {props.activeOption === option ? <i className="fas fa-circle"></i> : ""}
                                 {option}
-                            </a>
+                            </Dropdown.Link>
                         )
                     }
                 })}
-            </div>
-        </div>
+            </Dropdown.Menu>
+        </Dropdown>
     )
 }

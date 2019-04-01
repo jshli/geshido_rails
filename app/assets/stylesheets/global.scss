@@ -36,19 +36,20 @@
     font-size: 1rem;
     border: none;
     border: 1px solid black;
-    color: black !important;
+    color: black;
     transition: all ease 0.3s;
     align-self: flex-start;
     text-align: center;
     font-family: 'Source Sans Pro', sans-serif;
     cursor: pointer;
 }
-$soft-shadow: 0  20px 40px rgba(0,0,0,0.10);
+$soft-shadow: 0 20px 40px rgba(0,0,0,0.10);
 $purple : #5C4B7C;
 
 button, a {
   cursor: pointer;
-  text-decoration: none
+  text-decoration: none;
+  color: black;
 }
 
 *{
@@ -62,6 +63,7 @@ body {
 label {
   display: block;
 }
+
 
 p, label {
   color: #757580;
@@ -101,32 +103,14 @@ input {
   padding: 0 8rem;
   form {
     @extend %flex-hc-stretch--column;
-    input {
-      width: 100%;
-      height: 1.5rem;
-      box-shadow: none;
-      margin-bottom: 1.5rem;
-      border: none;
-      font-weight: bold;
-      border-bottom: #ECECEC solid 1px;
-      padding: 1.5rem 1rem;
-      transition: all ease 0.3s;
-      
-    }
+    
     .grid {
       @extend %grid-col-2;
     }
-    input:focus {
-      outline: none;
-      border-left: black solid 2px;
-      box-shadow: $soft-shadow;
-    }
-    label {
-      margin-bottom: 1rem;
-    }
+    
     margin: 2rem 0 ;
   }
-  .container {
+.container {
     width: 100%;
     
   }
@@ -142,55 +126,12 @@ input {
   }
 }
 
-.divider {
-  margin: 1rem 0;
-  border-bottom: 1px solid rgba(0,0,0,0.10)
-}
-
-.check {
-  border: 2px black solid;
-  height: 1.5rem;
-  width: 1.5rem;
-  border-radius: 1000px;
-  padding: 0;
-  transition: all ease 0.3s;
-}
-.check--completed {
-  background-color: black
-}
 
 .dashboard {
   min-height: 100vh;
   display: grid;
   grid-template-columns: 20% auto;
-  .task-input-form {
-    position: relative;
-    opacity: 0.5;
-    transition: all ease 0.3s;
-    margin-top: 1rem;
-  }
-  .task-input-form--active {
-    opacity: 1;
-    button {
-      color: #369DFD;
-    }
-  }
-  .task-input {
-    width: 100%;
-    border: none;
-    border-bottom: 1px solid black;
-    height: 3rem;
-    padding: 2.5rem 0 2.5rem 3rem;;
-    font-size: 1.5rem;
-  }
 
-  .add-btn {
-    @extend %button-reset;
-    position: absolute;
-    height: 100%;
-    font-size: 1rem;
-    max-height: 5rem;
-  }
 
   main {
     padding: 7rem 15rem;
@@ -251,46 +192,6 @@ input {
   grid-template-columns: 20% 40% auto;
 }
 
-.task-item:hover {
-  border-left: 3px solid black;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-}
-
-.task-item {
-  display: grid;
-  grid-template-columns: 10% auto;
-  transition: all ease 0.3s;
-  border-bottom: 1px solid rgba(0,0,0,0.1);
-  cursor: pointer;
-  .check-box {
-    @extend %flex-center-everything--column
-  }
-  .details__wrap {
-    display: grid;
-    grid-template-columns: 90% auto;
-    overflow: scroll;
-    align-items: center;
-    padding:1.5rem 3rem;
-    overflow: hidden;
-  }
-
-  .small-details-grid {
-    display: grid;
-    color: rgba(0,0,0,0.5);
-    grid-template-columns: auto 1fr;
-    grid-column-gap: 1rem;
-  }
-}
-
-.task-item--completed {
-  p, h4 {
-    opacity: 0.5;
-    text-decoration: line-through;
-  }
-}
-
-
-
 .project-list {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -315,29 +216,11 @@ input {
 
 .new-task-extension {
   padding: 2rem 3rem 3rem 0;
-  .due-date-grouping {
-    display: grid;
-    grid-auto-flow: column;
-    margin-bottom: 3rem;
-    grid-column-gap: 1rem;
-    grid-template-columns: repeat(3,min-content);
+  .project-list__wrap {
+    margin-bottom: 2rem;
   }
 
-  .button--active {
-    color: white;
-    background: black;
-  }
-  p {
-    color: black;
-    font-weight: bold;
-  }
-  .button:hover {
-    color: white !important;
-    background: black;
-  }
-  .check {
-    display: inline-block
-  }
+
   .hidden {
     display: none;
   }
@@ -345,23 +228,23 @@ input {
     position: absolute;
     top: 14rem;
   }
-  .custom_date__wrapper {
-    position: relative;
-  }
+  // .custom_date__wrapper {
+  //   position: relative;
+  // }
 
-  .button {
-    @extend %button;
-    padding: 0.5rem 1.5rem;
-    input[type=radio]{
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      top: 0;
-      left: 0;
-      opacity: 0;
-    }
-  }
+  // .button {
+  //   @extend %button;
+  //   padding: 0.5rem 1.5rem;
+  //   input[type=radio]{
+  //     position: absolute;
+  //     width: 100%;
+  //     height: 100%;
+  //     margin: 0;
+  //     top: 0;
+  //     left: 0;
+  //     opacity: 0;
+  //   }
+  // }
 }
 .project-wrap {
   display: grid;
@@ -385,216 +268,14 @@ input {
     opacity: 0;
     transition: all 0.3s ease;
   }
-  .dropdown-wrap {
-    align-self: center;
-  }
+
   .hover {
     opacity: 0.5;
   }
   .pressed {
     opacity: 1
   }
-  .utilities-wrap {
-    display: grid;
-    grid-column-gap: 1rem;
-    grid-auto-flow: column
-  }
   
-}
-.dropdown-wrap {
-  position: relative;
-  cursor: pointer;
-}
-
-.dropdown-menu {
-  position: absolute;
-  display: none;
-  flex-direction: column;
-  right: 0;
-  background: white;
-  z-index: 2;
-  box-shadow: $soft-shadow;
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
-  p {
-    margin: 0 1.5rem 1rem 1.5rem;
-    color: rgba(0,0,0,0.5)
-  }
-  .fa-circle {
-    font-size: 4px;
-    align-self: center;
-
-  }
-  a {
-    padding: 1rem 1.5rem;
-    transition: all ease 0.3s;
-    display: grid;
-    grid-column-gap: 0.5rem;
-    grid-auto-flow: column;
-    grid-template-columns: max-content auto
-
-  }
-  a:hover {
-    color: white;
-    background: black;
-  }
-}
-.dropdown-menu--active {
-  display: flex;
-}
-
-.selector-wrap {
-  position: relative;
-  .selector {
-    border: 1px solid rgba(0,0,0,0.1);
-    padding: 0.5rem 0.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    text-align: left;
-    margin: 0 1.5rem;
-    transition: all 0.3s ease;
-    min-width: 25ch;
-    p {
-      margin: 0;
-      font-weight: bold
-    }
-  }
-  .selector--active {
-    border: 1px solid black;
-    p {
-      color: black;
-    }
-  }
-}
-
-.edit-modal {
-  padding: 3rem 0 0 2rem;
-  .check {
-    border: 2px black solid;
-    height: 1.5rem;
-    width: 1.5rem;
-    border-radius: 1000px;
-    padding: 0;
-    transition: all ease 0.3s;
-    @extend %flex-center-everything--column;
-  }
-  .selector {
-    margin: 0 0 1.5rem 0;
-    padding: 0;
-    border: none;
-    cursor: pointer;
-    p {
-      font-size: 1.25rem;
-      color: black
-    }
-  }
-  .dropdown-menu {
-    width: 100%
-  }
-
-
-  .check--completed {
-    background-color: black
-  }
-  .logs-wrap {
-    max-height: 10rem;
-    overflow: scroll;
-  }
-  input[type=checkbox] {
-    height: 100%;
-    width: 100%;
-    opacity: 0;
-  }
-
-  .edit-wrap {
-    position: sticky;
-    top: 1rem;
-    padding: 2rem;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-    border-top: 3px solid black;
-  }
-  input[type=text] {
-    border:none
-  }
-  .divider {
-    margin: 1rem 0;
-    border-bottom: 1px solid rgba(0,0,0,0.10)
-  }
-  input::placeholder {
-    color: black;
-  }
-  .task-name {
-    font-size: 1.5rem;
-    height: 2rem;
-    margin: 1.5rem 0;
-    color: black !important;
-    width: 100%
-  }
-  .utility-menu {
-    position: absolute;
-    top: 2rem;
-    right: 2rem;
-    display: flex;
-    justify-content: space-between;
-    z-index: 2;
-    .delete-btn {
-      @extend %button-reset;
-      transition: all ease 0.3s;
-      color: rgba(0,0,0,0.5);
-      font-size: 1rem;
-    }
-    .delete-btn:hover {
-      color: red;
-    }
-  }
-  .content-wrap {
-    @extend %flex-center-la--row;
-    p {
-      margin-bottom: 0;
-    }
-  }
-  .content-wrap > * {
-    margin-right: 1rem;
-    color: rgba(0,0,0,0.7);
-  }
-  textarea {
-    width: 100%;
-    border: none;
-    box-shadow: none;
-    outline: none;
-    font-size: 1rem;
-    padding: 0.5rem;
-    border: 1px solid rgba(0, 0, 0, 0);
-    transition: all ease 0.3s;
-  }
-  textarea:active, textarea:focus {
-    border: 1px solid rgba(0,0,0,0.1);
-  }
-}
-.text-wrap{
-  display: grid;
-  overflow: scroll;
-  p, h4 {
-    margin-bottom: 0;
-    line-height: 1.5rem;
-  }
-}
-.timer-wrap {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  .fa-clock {
-    transform: translateX(0) rotatez(0);
-    transition: all ease 0.3s;
-  }
-  p {
-    margin-bottom: 0;
-  }
-  .active {
-    color: #FA3E3D;
-    transform: translateX(-2rem) rotateZ(-360deg)
-  }
 }
 
 .DayPicker-wrapper {

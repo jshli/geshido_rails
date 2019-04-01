@@ -21,7 +21,7 @@ class TimersController < ApplicationController
             task.current_timer_id = timer.id
             task.save
             log = Log.new
-            log.description = "Timer started "
+            log.description = "Timer started"
             log.user_id = current_user.id
             log.task_id = task.id
             log.save

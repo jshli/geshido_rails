@@ -1,58 +1,70 @@
-import React, {useState, useEffect} from "react"
+import React, {useState, useEffect } from "react"
 import classNames from 'classnames'
 import Timer from './Timer'
 import Axios from "axios"
 import Moment from "moment"
 
+import Check from "./Elements/Check"
+import {TaskItem, CheckColumn, DetailsColumn, TimerColumn} from "./Blocks/TaskItem/Index"
+import ContentRow from "./Blocks/ContentRow"
+
+
 const TIMERS = [];
 const PROJECT = "";
+const CancelToken = Axios.CancelToken;
+const source = CancelToken.source();
 
 export default function Task(props) {
-    const [isComplete, setIsComplete] = useState(props.task.is_completed)
-    const [currentTimerId, setCurrentTimerId] = useState(props.task.current_timer_id)
+    const [isCompleted, setIsCompleted] = useState(props.task.is_completed)
+    //does this need to be a state??
     const [currentTimer, setCurrentTimer] = useState(null)
-    const [timers, setTimers] = useState(TIMERS)
     const [currentProject, setCurrentProject] = useState(PROJECT)
     const [totalTime, updateTotalTime] = useState(props.task.total_time)
 
+    const currentTimerId = props.task.current_timer_id
+
     const markTaskComplete = (e) => {
         e.preventDefault();
-        setIsComplete(!isComplete)
+        setIsCompleted(!isCompleted)
         props.markTaskComplete()
     }
 
     useEffect(() => {
-        const fetchTimers = async() => {
-            const url = `/api/timers/${props.task.id}`
-            const result = await Axios.get(url);
-            setTimers(result.data)
-        }
-        fetchTimers();
-    }, [props, setTimers])
-
-    useEffect(() => {
-        if (currentTimerId !== null) {
+        if (currentTimerId) {
             const fetchCurrentTimer = async() => {
                 const url = `/timers/${currentTimerId}`
-                const result = await Axios.get(url)
+                const result = await Axios.get(url, {
+                    cancelToken: source.token
+                })
                 setCurrentTimer(result.data)
             }
-            fetchCurrentTimer()
+            fetchCurrentTimer();
+            return () => {
+                source.cancel
+            }
         }
-    }, [props, setCurrentTimer])
+    }, [props.task.current_timer_id])
 
     useEffect(() => {
-        if (props.task.project_id !== null) {
+        if (props.task.project_id) {
             const fetchProject = async() => {
                 const url = `/api/projects/${props.task.project_id}`
-                const result = await Axios.get(url)
+                const result = await Axios.get(url, {
+                    cancelToken: source.token
+                })
                 setCurrentProject(result.data)
             }
             fetchProject()
-        }
-    }, [props, setCurrentProject])
+            return () => {
+                source.cancel
+            }
+        } else {
+            setCurrentProject(null)
+        } 
+    }, [props.task.project_id])
 
 
+    //this only updates on server and within this state. Can we hold 
     const toggleTimer = () => {
         if (!currentTimer){
             const url = `/timers`
@@ -60,18 +72,19 @@ export default function Task(props) {
                 user_id: props.task.user_id,
                 task_id: props.task.id
             })
-            .then(res => setCurrentTimer(res.data))
+            .then(res => {
+                setCurrentTimer(res.data)
+                props.editTask("current_timer_id", res.data.id, props.task.id)
+            })
         } 
         else {
             const url = `/timers/${currentTimer.id}/stop`
-            Axios.put(url, {
-                // timer: props.task.id
-            })
+            Axios.put(url)
             .then(res => updateTotalTime(totalTime + res.data.total_time))
-            .then(res => console.log(res))
             .then(setCurrentTimer(null))
-            .then(setCurrentTimerId(null))
+            props.editTask("current_timer_id", null, props.task.id)
         }
+       
     }
     
     const formatTime = minutes => {
@@ -80,30 +93,27 @@ export default function Task(props) {
         return minutes > 60 ? `${hours} h ${("0" + rest).slice(-2)} m` : `${rest} m`
     }
 
-
     const handleClick = () => {
         props.setActiveTask()
     }
 
-    const { task, project } = props
+    const { task } = props
     return (
-        <div className={`task-item ${isComplete ? `task-item--completed` : ""}` }>
-            <form onSubmit={markTaskComplete} className="check-box">
-                <button className={`check ${isComplete ? `check--completed` : ""}`}></button>
-            </form>
-            <div className="details__wrap">
-                <div onClick={handleClick} className="text-wrap">
-                    {currentProject ? <p>{currentProject.name}</p> : ""}
-                    <h4>{`${task.name}`}</h4>
-                    <div className="small-details-grid">
-                            {task.due_date ? <div><p>{"Due " + Moment(task.due_date).startOf('day').fromNow()}</p> </div> : "" }
-                        <div>
-                            {totalTime ? <p>{formatTime(totalTime)} spent so far</p> : ""}
-                        </div>
-                    </div>
-                </div>
+        <TaskItem>
+            <CheckColumn onSubmit={markTaskComplete}>
+                <Check isCompleted={task.is_completed}/>
+            </CheckColumn>
+            <DetailsColumn onClick={handleClick} isCompleted={isCompleted}>
+                {currentProject ? <TaskItem.Text>{currentProject.name}</TaskItem.Text> : ""}
+                <TaskItem.Title>{`${task.name}`}</TaskItem.Title>
+                <ContentRow>
+                    {task.due_date ? <TaskItem.Text>{"Due " + Moment(task.due_date).startOf('day').fromNow()}</TaskItem.Text>: "" }
+                    {totalTime ? <TaskItem.Text>{formatTime(totalTime)} spent so far</TaskItem.Text> : ""}
+                </ContentRow>
+            </DetailsColumn>
+            <TimerColumn >
                 <Timer toggleTimer={toggleTimer} currentTimer={currentTimer}/>
-            </div>
-        </div>
+            </TimerColumn>
+        </TaskItem>
     )
 }

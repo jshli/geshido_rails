@@ -6,6 +6,7 @@ import ProjectList from "./ProjectList"
 import Greeter from "./Greeter"
 import Axios from 'axios'
 import CreateInputForm from "./CreateTaskForm";
+import { reset } from "ansi-colors";
 
 const FILTER_MODES = ["All", "Completed Only", "Uncompleted Only"]
 const SORT_MODES = ["Newest", "Oldest", "Alphabetical"]
@@ -18,8 +19,11 @@ class Dashboard extends React.Component {
             user: JSON.parse(this.props.user),
             projects: JSON.parse(this.props.projects),
             tasks: JSON.parse(this.props.tasks),
-            input: "",
-            dueDate:"",
+            newItem: {
+                name:"",
+                dueDate:"",
+                projectId:"",
+            },
             activeTask: "",
             currentMode: this.props.currentMode,
             greeting: this.props.greeting,
@@ -31,8 +35,11 @@ class Dashboard extends React.Component {
 
 
     handleInput = event => {
+        if (this.state.activeTask) {
+            this.clearActiveTask()
+        }
         this.setState({
-            input: event.target.value
+            newItem: {...this.state.newItem, name: event.target.value}
         })
     }
 
@@ -50,12 +57,12 @@ class Dashboard extends React.Component {
     }
 
     componentDidUpdate(prevState) {
-        const {currentMode, input} = this.state
-        if (input !== prevState && input.length > 0 && currentMode === "tasks") {
+        const {currentMode, newItem} = this.state
+        if (newItem !== prevState && newItem.name.length > 0 && currentMode === "tasks") {
             this.setState({
                 currentMode: "create task"
             })
-        } else if (input !== prevState && input.length < 1 && currentMode === "create task") {
+        } else if (newItem !== prevState && newItem.name.length < 1 && currentMode === "create task") {
             this.setState({
                 currentMode: "tasks"
             })
@@ -85,6 +92,7 @@ class Dashboard extends React.Component {
         }
     }
 
+    //saves changes made to edited task to server
     clearActiveTask = () => {
         let url = `/tasks/${this.state.activeTask}`
         const task = this.state.tasks.filter(task => task.id === this.state.activeTask).pop();
@@ -96,17 +104,17 @@ class Dashboard extends React.Component {
             is_completed: task.is_completed,
             project_id: task.project_id
         })
-        .then(res => console.log(res))
         .then(res => this.setState({
             activeTask: ""
         }))
     }
 
-    editTask = (field, value) => {
-        const activeTask = this.state.activeTask
+    //Edits local copy of task and shows edits live as they're made live
+    editTask = (field, value, taskId = this.state.activeTask) => {
+        //if taskId is being passed into the function, then we're calling for an edit that isn't coming from the modal
         this.setState({
             tasks: this.state.tasks.map(function(t){
-                if (t.id === activeTask){
+                if (t.id === taskId){
                     return {...t, [field]: value}
                 } else {
                     return t;
@@ -115,20 +123,29 @@ class Dashboard extends React.Component {
         })
     }
 
-    setDueDate = value => {
+    setNewItemDueDate = value => {
         this.setState({
-            dueDate: value
+            newItem: {...this.state.newItem, dueDate:value}
+        })
+    }
+
+    setNewItemProjectId = id => {
+        this.setState({
+            newItem: {...this.state.newItem, projectId:id}
+        })
+    }
+
+    resetNewItem = () => {
+        this.setState({
+            newItem: {...this.state.newItem, name: "", dueDate:"", projectId:""}
         })
     }
 
     addNewItem = event => {
         event.preventDefault();
-        this.setState({
-            input: ""
-        })
         if (this.state.currentMode === "create task"){
             let url = '/tasks'
-            const data = {name: this.state.input, user_id: this.state.user.id, is_completed: false, due_date: this.state.dueDate}
+            const data = {name: this.state.newItem.name, user_id: this.state.user.id, is_completed: false, due_date: this.state.newItem.dueDate, project_id: this.state.newItem.projectId}
             fetch(url, {
                 method: 'POST',
                 headers: {
@@ -140,15 +157,14 @@ class Dashboard extends React.Component {
             .then(res => this.setState({
                 tasks: [...this.state.tasks, res]
             }))
+            .then(() => this.resetNewItem())
             .then(() => this.sortTasks(this.state.tasks))
         } else if (this.state.currentMode === "create project") {
             let url = '/projects'
             Axios.post(url, {
                 name: this.state.input, 
                 user_id: this.state.user.id
-            }).then(res => this.setState({
-
-            }))
+            }).then(() => this.resetNewItem())
         }
     }
 
@@ -182,7 +198,7 @@ class Dashboard extends React.Component {
 
 
     render () {
-        const {user, projects, tasks, activeTask, isInputActive, currentMode, currentSortMode,currentFilterMode, greeting, subheading, input, dueDate} = this.state;
+        const {user, projects, tasks, activeTask, isInputActive, currentMode, currentSortMode,currentFilterMode, greeting, subheading, newItem, dueDate} = this.state;
         if (currentMode == "tasks" || currentMode == "create task") {
             return (
                 <section className={`dashboard ${activeTask !== "" ? `dashboard--3col`: ``}`}>
@@ -191,7 +207,7 @@ class Dashboard extends React.Component {
                         <div>
                             {currentMode == "tasks" ?
                                 <Greeter 
-                                greeting={greeting}
+                                greeting={`Welcome back, ${user.first_name}`}
                                 subheading={subheading} 
                                 user={user}
                                 sortModes={SORT_MODES}
@@ -210,13 +226,14 @@ class Dashboard extends React.Component {
                             subheading={subheading} 
                             user={user}
                             handleInput={this.handleInput}
-                            input = {input}
+                            newItem = {newItem}
                             addNewItem={this.addNewItem}
                             isInputActive={isInputActive}
                             currentMode = {currentMode}
                             projects = {projects}
-                            dueDate = {dueDate}
-                            setDueDate = {this.setDueDate}
+                            setDueDate = {this.setNewItemDueDate}
+                            setProjectId = {this.setNewItemProjectId}
+                            handleClear={this.resetNewItem}
                             />
                         </div>
                         {currentMode === "tasks" ?
@@ -227,6 +244,7 @@ class Dashboard extends React.Component {
                             markTaskComplete={this.markTaskComplete}
                             currentSortMode = {currentSortMode}
                             currentFilterMode = {currentFilterMode}
+                            editTask = {this.editTask}
                             />
                         :
                         "" }
@@ -266,9 +284,10 @@ class Dashboard extends React.Component {
                             subheading={subheading} 
                             user={user}
                             handleInput={this.handleInput}
-                            input = {input}
+                            newItem = {newItem}
                             addNewItem={this.addNewItem}
                             isInputActive={isInputActive}
+                            
                             />
                         </div>
                     </main>
@@ -287,25 +306,6 @@ class Dashboard extends React.Component {
                         />
                     </main>
                     {activeTask ? <EditModal task={tasks.filter(task => task.id === activeTask).pop()} setActiveTask={this.setActiveTask} clearActiveTask={this.clearActiveTask} deleteTask={() => this.deleteTask(activeTask)} editTask={this.editTask}/> : "" }
-                </section>
-            )
-        } else {
-            return (
-                <section className={`dashboard ${activeTask !== "" ? `dashboard--3col`: ``}`}>
-                    <Sidebar projects={projects} />
-                    <main className={`${activeTask === "" ? "main" : "main--shrink"}`}>
-                        <CreateInputForm
-                        greeting={greeting}
-                        subheading={subheading} 
-                        user={user}
-                        handleInput={this.handleInput}
-                        input = {input}
-                        addNewItem={this.addNewItem}
-                        isInputActive={isInputActive}
-                        currentMode = {currentMode}
-                        projects = {projects}
-                        />
-                    </main>
                 </section>
             )
         }

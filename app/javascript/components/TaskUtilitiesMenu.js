@@ -2,11 +2,13 @@ import React, { useState, useEffect, useRef} from "react"
 import classNames from 'classnames'
 import RadialChart from './RadialChart'
 import DropdownMenu from './DropdownMenu'
+import Dropdown from "./Blocks/DropdownMenu/Index"
+import {Divider} from "./Elements/Divider"
+import ContentRow from './Blocks/ContentRow'
 
 export default function TaskUtilitiesMenu(props) {
     const [hover, setHover] = useState(false)
     const [menuOpen, setMenuOpen] = useState(false)
-    const [filterMenuOpen, setFilterMenuOpen] = useState(false)
 
     const getCompletionPercentage = () => {
         const completedTasks = props.tasks.filter(task => task.is_completed);
@@ -31,41 +33,38 @@ export default function TaskUtilitiesMenu(props) {
     }, []);
 
     return (
-        <div className="utilities-wrap">
-            <div ref={node} className="dropdown-wrap" onClick={handleClick}>
+        <ContentRow>
+            <Dropdown ref={node} onClick={handleClick}>
                 <i onClick = {() => setMenuOpen(!menuOpen)} className={classNames(`fas fa-ellipsis-h`, {
                     'hover': hover,
                     'hover':!hover,
                     'pressed': menuOpen 
                 })}>
                 </i>
-                <div className={classNames("dropdown-menu", {
-                    'dropdown-menu--active' : menuOpen
-                })}
-                >
-                    <p>Sorting</p>
+                <Dropdown.Menu menuOpen={menuOpen}>
+                    <Dropdown.Label>Sorting</Dropdown.Label>
                     {props.sortModes.map((mode, index) => {
                         return (
-                            <a onClick={() => props.changeSortMode(mode)} key={index}> 
+                            <Dropdown.Link onClick={() => props.changeSortMode(mode)} key={index}> 
                                 {props.currentSortMode === mode ? <i className="fas fa-circle"></i> : ""}
                                 {mode} 
-                            </a>
+                            </Dropdown.Link>
                         )
                     })}
-                <div className="divider"></div>
-                <p>Filters</p>
+                <Divider />
+                <Dropdown.Label>Filters</Dropdown.Label>
                     <DropdownMenu 
                     data={props.filterModes}
                     handleClick={props.changeFilterMode}
                     activeOption={props.currentFilterMode}
                     showIndicator={true}
                     />
-                </div>
-            </div>
+                </Dropdown.Menu>
+            </Dropdown>
             <RadialChart
             progress={getCompletionPercentage()}
             color="#000000"/>
-        </div>
+        </ContentRow>
     )
 }
 
