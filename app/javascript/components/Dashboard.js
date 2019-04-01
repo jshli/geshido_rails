@@ -6,7 +6,6 @@ import ProjectList from "./ProjectList"
 import Greeter from "./Greeter"
 import Axios from 'axios'
 import CreateInputForm from "./CreateTaskForm";
-import { reset } from "ansi-colors";
 
 const FILTER_MODES = ["All", "Completed Only", "Uncompleted Only"]
 const SORT_MODES = ["Newest", "Oldest", "Alphabetical"]
