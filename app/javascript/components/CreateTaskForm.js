@@ -16,14 +16,14 @@ export default function CreateTaskForm(props) {
     const [inputFocus, setInputFocus] = useState(null)
 
     const handleToday = event => {
-        setDueToday(true);
+        setDueToday(!dueToday);
         setDueTomorrow(false);
         setDueCustom(false);
         props.setDueDate(Moment.utc().endOf('day').toString())
     }
     
     const handleTomorrow = event => {
-        setDueTomorrow(true)
+        setDueTomorrow(!dueTomorrow)
         setDueToday(false)
         setDueCustom(false)
         props.setDueDate(Moment.utc().endOf('day').add(2, 'day').toString())

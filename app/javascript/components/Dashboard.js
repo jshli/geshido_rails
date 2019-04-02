@@ -144,20 +144,19 @@ class Dashboard extends React.Component {
         event.preventDefault();
         if (this.state.currentMode === "create task"){
             let url = '/tasks'
-            const data = {name: this.state.newItem.name, user_id: this.state.user.id, is_completed: false, due_date: this.state.newItem.dueDate, project_id: this.state.newItem.projectId}
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                    },
-                body: JSON.stringify(data)
+            const data = 
+            Axios.post(url, {
+                name: this.state.newItem.name, 
+                user_id: this.state.user.id, 
+                is_completed: false, 
+                due_date: this.state.newItem.dueDate, 
+                project_id: this.state.newItem.projectId
             })
-            .then(res => res.json())
             .then(res => this.setState({
-                tasks: [...this.state.tasks, res]
+                tasks: [...this.state.tasks, res.data]
             }))
             .then(() => this.resetNewItem())
-            .then(() => this.sortTasks(this.state.tasks))
+
         } else if (this.state.currentMode === "create project") {
             let url = '/projects'
             Axios.post(url, {
