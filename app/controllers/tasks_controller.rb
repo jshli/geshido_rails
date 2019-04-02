@@ -16,7 +16,7 @@ class TasksController < ApplicationController
             task.name = params[:name]
             task.user_id = params[:user_id]
             task.is_completed = false
-            task.due_date = params[:due_date]
+            # task.due_date = params[:due_date]
             task.project_id = params[:project_id]
             task.total_time = 0
             if task.save

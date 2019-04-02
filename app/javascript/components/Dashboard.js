@@ -144,7 +144,6 @@ class Dashboard extends React.Component {
         event.preventDefault();
         if (this.state.currentMode === "create task"){
             let url = '/tasks'
-            const data = 
             Axios.post(url, {
                 name: this.state.newItem.name, 
                 user_id: this.state.user.id, 
