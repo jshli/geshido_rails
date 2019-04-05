@@ -1,7 +1,7 @@
 import styled from "styled-components"
-import Button from "../../Elements/Button"
+import Btn from "../../Elements/Btn"
 
-const Link = styled(Button) `
+const Link = styled(Btn) `
     padding: 1rem 1.5rem;
     display: grid;
     grid-column-gap: 0.5rem;

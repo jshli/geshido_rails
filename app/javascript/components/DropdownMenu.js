@@ -1,5 +1,4 @@
 import React, {useState, useEffect, useRef} from "react"
-import classNames from 'classnames'
 import Dropdown from "./Blocks/DropdownMenu/Index"
 
 export default function DropdownMenu(props) {

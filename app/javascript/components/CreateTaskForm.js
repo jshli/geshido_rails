@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import classNames from 'classnames';
 import Moment from 'moment';
 import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 
-import Button from './Elements/Button'
+import SelectorBtn from './Elements/SelectorBtn'
 import ContentRow from "./Blocks/ContentRow"
 import Form from './Blocks/CreateItemForm/Index'
+import Btn from './Elements/Btn'
 
 export default function CreateTaskForm(props) {
     const [dueToday, setDueToday] = useState(false)
@@ -62,10 +62,10 @@ export default function CreateTaskForm(props) {
     return (
         <div>
             <Form onSubmit={addNewItem} active = {newItem.name.length > 0 || inputFocus} onFocus={handleFocus} onBlur={handleBlur}>
-                <Form.SubmitButton><i className="fas fa-plus"></i></Form.SubmitButton>
+                <Form.CreateButton><i className="fas fa-plus"></i></Form.CreateButton>
                 {currentMode === "create task" ? <Form.ClearButton onClick={handleClear}><i className="fas fa-times"></i></Form.ClearButton> : ""}
                 <Form.Input type="text" 
-                onChange={handleInput} 
+            onChange={handleInput} 
                 placeholder={currentMode === "tasks" ? "What do you need done?" : "New project name" }
                 value={newItem.name} />
 
@@ -75,16 +75,16 @@ export default function CreateTaskForm(props) {
                             Due Date:
                         </p>
                         <ContentRow threeCol={true} marginBottom={true}>
-                            <Button onClick={handleToday} active={dueToday}>
+                            <SelectorBtn onClick={handleToday} active={dueToday}>
                                 Today
-                            </Button>
-                        <Button onClick={handleTomorrow} active={dueTomorrow}>
+                            </SelectorBtn>
+                        <SelectorBtn onClick={handleTomorrow} active={dueTomorrow}>
                                 Tomorrow
-                            </Button>
-                                <Button onClick={handleClick}> 
+                            </SelectorBtn>
+                                <SelectorBtn onClick={handleClick}> 
                                     {dueCustom ? `${Moment(dueDate).format('DD MMMM')}` : "Custom..."}
                                     <div></div>
-                                </Button>
+                                </SelectorBtn>
                                 {showDatePicker ? 
                                     <div className="datepicker-wrapper">
                                         <DayPicker
@@ -106,7 +106,7 @@ export default function CreateTaskForm(props) {
                             <p>{project.name}</p>
                             </div>)}
                         </div>
-                        <Button onClick={addNewItem}>Save</Button>   
+                        <Btn onClick={addNewItem}>Save</Btn>   
                     </div>
                      
                     :

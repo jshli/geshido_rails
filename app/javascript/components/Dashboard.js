@@ -7,8 +7,12 @@ import Greeter from "./Greeter"
 import Axios from 'axios'
 import CreateInputForm from "./CreateTaskForm";
 
+
 const FILTER_MODES = ["All", "Completed Only", "Uncompleted Only"]
-const SORT_MODES = ["Newest", "Oldest", "Alphabetical"]
+const SORT_MODES = ["Newest", "Oldest", "Alphabetical", "Custom"]
+
+export const TasksContext = React.createContext({})
+export const UserContext = React.createContext({})
 
 class Dashboard extends React.Component {
     constructor(props){
@@ -31,7 +35,7 @@ class Dashboard extends React.Component {
             currentFilterMode: "All"
         }
     }
-
+    
 
     handleInput = event => {
         if (this.state.activeTask) {
@@ -198,63 +202,65 @@ class Dashboard extends React.Component {
         const {user, projects, tasks, activeTask, isInputActive, currentMode, currentSortMode,currentFilterMode, greeting, subheading, newItem, dueDate} = this.state;
         if (currentMode == "tasks" || currentMode == "create task") {
             return (
-                <section className={`dashboard ${activeTask !== "" ? `dashboard--3col`: ``}`}>
-                    <Sidebar projects={projects} />
-                    <main className={`${activeTask === "" ? "main" : "main--shrink"}`}>
-                        <div>
-                            {currentMode == "tasks" ?
-                                <Greeter 
-                                greeting={`Welcome back, ${user.first_name}`}
-                                subheading={subheading} 
-                                user={user}
-                                sortModes={SORT_MODES}
-                                filterModes={FILTER_MODES}
-                                currentSortMode={currentSortMode}
-                                currentMode = {currentMode}
-                                currentFilterMode={currentFilterMode}
-                                changeSortMode={this.changeSortMode}
-                                changeFilterMode={this.changeFilterMode}
-                                tasks={tasks}
-                                />
-                            :
-                            ""}
-                            <CreateInputForm 
-                            greeting={greeting}
-                            subheading={subheading} 
-                            user={user}
-                            handleInput={this.handleInput}
-                            newItem = {newItem}
-                            addNewItem={this.addNewItem}
-                            isInputActive={isInputActive}
-                            currentMode = {currentMode}
-                            projects = {projects}
-                            setDueDate = {this.setNewItemDueDate}
-                            setProjectId = {this.setNewItemProjectId}
-                            handleClear={this.resetNewItem}
-                            />
-                        </div>
-                        {currentMode === "tasks" ?
-                            <TaskList user={user} 
-                            projects={projects} 
-                            tasks={tasks} 
-                            setActiveTask = {this.setActiveTask}
-                            markTaskComplete={this.markTaskComplete}
-                            currentSortMode = {currentSortMode}
-                            currentFilterMode = {currentFilterMode}
-                            editTask = {this.editTask}
-                            />
-                        :
-                        "" }
-                        
-                    </main>
-                    {activeTask ? <EditModal task={tasks.filter(task => task.id === activeTask).pop()} 
-                    setActiveTask={this.setActiveTask} 
-                    clearActiveTask={this.clearActiveTask} 
-                    deleteTask={() => this.deleteTask(activeTask)} 
-                    editTask={this.editTask}
-                    projects={projects}
-                    /> : "" }
-                </section>
+                <TasksContext.Provider value = {{ tasks: this.state.tasks}}>
+                    <UserContext.Provider value = {{user: this.state.user}}>
+                        <section className={`dashboard ${activeTask !== "" ? `dashboard--3col`: ``}`}>
+                            <Sidebar projects={projects} />
+                            <main className={`${activeTask === "" ? "main" : "main--shrink"}`}>
+                                <div>
+
+                                    <Greeter 
+                                    greeting={`Welcome back`}
+                                    subheading={subheading} 
+                                    sortModes={SORT_MODES}
+                                    filterModes={FILTER_MODES}
+                                    currentSortMode={currentSortMode}
+                                    currentMode = {currentMode}
+                                    currentFilterMode={currentFilterMode}
+                                    changeSortMode={this.changeSortMode}
+                                    changeFilterMode={this.changeFilterMode}
+                                    tasks={tasks}
+                                    />
+
+                                    <CreateInputForm 
+                                    greeting={greeting}
+                                    subheading={subheading} 
+                                    user={user}
+                                    handleInput={this.handleInput}
+                                    newItem = {newItem}
+                                    addNewItem={this.addNewItem}
+                                    isInputActive={isInputActive}
+                                    currentMode = {currentMode}
+                                    projects = {projects}
+                                    setDueDate = {this.setNewItemDueDate}
+                                    setProjectId = {this.setNewItemProjectId}
+                                    handleClear={this.resetNewItem}
+                                    />
+                                </div>
+                                {currentMode === "tasks" ?
+                                    <TaskList user={user} 
+                                    projects={projects} 
+                                    tasks={tasks} 
+                                    setActiveTask = {this.setActiveTask}
+                                    markTaskComplete={this.markTaskComplete}
+                                    currentSortMode = {currentSortMode}
+                                    currentFilterMode = {currentFilterMode}
+                                    editTask = {this.editTask}
+                                    />
+                                :
+                                "" }
+                                
+                            </main>
+                            {activeTask ? <EditModal task={tasks.filter(task => task.id === activeTask).pop()} 
+                            setActiveTask={this.setActiveTask} 
+                            clearActiveTask={this.clearActiveTask} 
+                            deleteTask={() => this.deleteTask(activeTask)} 
+                            editTask={this.editTask}
+                            projects={projects}
+                            /> : "" }
+                        </section>
+                    </UserContext.Provider>
+                </TasksContext.Provider>
 
             )
         } else if (currentMode == "create project"){

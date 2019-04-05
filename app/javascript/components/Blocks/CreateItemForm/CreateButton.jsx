@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-const SubmitButton = styled.button `
+const CreateButton = styled.button `
     border: none;
     background: none;
     position: absolute;
@@ -13,4 +13,4 @@ const SubmitButton = styled.button `
     }
 `
 
-export default SubmitButton
+export default CreateButton

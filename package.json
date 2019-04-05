@@ -12,6 +12,7 @@
     "react": "^16.8.4",
     "react-day-picker": "^7.3.0",
     "react-dom": "^16.8.4",
+    "react-transition-group": "^2.8.0",
     "react_ujs": "^2.4.4",
     "styled-components": "^4.2.0"
   },

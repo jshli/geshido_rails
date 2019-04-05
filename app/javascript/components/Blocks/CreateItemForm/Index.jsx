@@ -2,7 +2,7 @@ import styled from "styled-components"
 
 import ClearButton from "./ClearButton"
 import Input from "./Input"
-import SubmitButton from "./SubmitButton"
+import CreateButton from "./CreateButton"
 import Check from "./Check"
 
 const Form = styled.form `
@@ -14,7 +14,7 @@ const Form = styled.form `
 
 Form.ClearButton = ClearButton
 Form.Input = Input
-Form.SubmitButton = SubmitButton
+Form.CreateButton = CreateButton
 Form.ClearButton = ClearButton
 Form.Check = Check
 

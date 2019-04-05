@@ -1,15 +1,37 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
+
+import { TasksContext } from "./Dashboard"
+
+import Tooltip from "./Tooltip"
+
 const DEFAULT_COLOR = '#000000';
 
 class RadialChart extends Component {
-    state = {}
+    static contextType = TasksContext;
+    state = {
+        tooltip: false,
+    }
+
     componentDidMount() {
         // For initial animation
         setTimeout(() => {
             this.setState({ setStrokeLength: true });
         });
     }
+    handleMouseEnter = () => {
+        
+        this.setState({
+            tooltip: true
+        })
+    }
+
+    handleMouseLeave = () => {
+        this.setState({
+            tooltip:false
+        })
+    }
+
     render() {
         const { setStrokeLength } = this.state;
         const {
@@ -25,11 +47,14 @@ class RadialChart extends Component {
         const circumference = 2 * 3.14 * circleRadius;
         const strokeLength = setStrokeLength ? circumference / 100 * progress : 0;
 return (
+        // <TasksContext.Consumer>
            <div
                 className={classNames('radial-chart', className, {
                     'no-progress': strokeLength === 0
                 })}
-           >
+                onMouseEnter={this.handleMouseEnter}
+                onMouseLeave={this.handleMouseLeave}
+           >   
                <svg viewBox="0 0 180 180" width={dimension} height={dimension}>
                    <circle
                        className="radial-chart-total"
@@ -52,7 +77,9 @@ return (
                        r={circleRadius}
                    />
                </svg>
+               <Tooltip active={this.state.tooltip}/>
            </div>
+        //    </TasksContext.Consumer>
         );
     }
 }
@@ -63,4 +90,5 @@ RadialChart.defaultProps = {
     dimension: 30,
     color: DEFAULT_COLOR
 };
+
 export default RadialChart;
