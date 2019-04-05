@@ -1,6 +1,6 @@
 import React from "react"
 import StyledForm from "./Blocks/Form/Index"
-import SecondaryButton from "./Elements/SecondaryBtn"
+import Btn from "./Elements/Btn"
 
 
 export default function Form(props){
@@ -16,7 +16,7 @@ export default function Form(props){
                 <StyledForm.Input name='email' type='email'/>
                 <StyledForm.Label>Password</StyledForm.Label>
                 <StyledForm.Input name='password' type='password' />
-                <SecondaryButton>Log in</SecondaryButton>
+                <Btn>Log in</Btn>
             </StyledForm>
         )
     } 

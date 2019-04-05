@@ -1,6 +1,4 @@
 import React, {useState} from "react"
-import Moment from "moment"
-import classNames from 'classnames'
 import TimerClock from './TimerClock'
 
 import TimerItem from './Blocks/Timer/Index'
