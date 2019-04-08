@@ -10,6 +10,7 @@ const Selector = styled.div `
     margin: 0 1.5rem;
     transition: all 0.3s ease;
     min-width: 25ch;
+    margin-bottom: 1.5rem;
     ${({fullWidth}) => fullWidth && `
         width: 100%;
         border: none;

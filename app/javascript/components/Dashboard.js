@@ -163,9 +163,13 @@ class Dashboard extends React.Component {
         } else if (this.state.currentMode === "create project") {
             let url = '/projects'
             Axios.post(url, {
-                name: this.state.input, 
+                name: this.state.newItem.name, 
                 user_id: this.state.user.id
-            }).then(() => this.resetNewItem())
+            })
+            .then(res => this.setState({
+                projects: [...this.state.projects, res.data]
+            }))
+            .then(() => this.resetNewItem())
         }
     }
 
@@ -208,7 +212,6 @@ class Dashboard extends React.Component {
                             <Sidebar projects={projects} />
                             <main className={`${activeTask === "" ? "main" : "main--shrink"}`}>
                                 <div>
-
                                     <Greeter 
                                     greeting={`Welcome back`}
                                     subheading={subheading} 
@@ -265,10 +268,12 @@ class Dashboard extends React.Component {
             )
         } else if (currentMode == "create project"){
             return (
+                <UserContext.Provider value = {{user: this.state.user}}>
                 <section className={`dashboard ${activeTask !== "" ? `dashboard--3col`: ``}`}>
                     <Sidebar projects={projects} />
                     <main className="main--full">
                         <div>
+                            
                             <Greeter 
                             greeting="Create a new project"
                             subheading="What are we creating today?"
@@ -295,21 +300,28 @@ class Dashboard extends React.Component {
                         </div>
                     </main>
                 </section>
+                </UserContext.Provider>
             )
         } else if (currentMode == "projects") {
             return (
-                <section className={`dashboard ${activeTask !== "" ? `dashboard--3col`: ``}`}>
-                    <Sidebar projects={projects} />
-                    <main className={`${activeTask === "" ? "main" : "main--shrink"}`}>
-                        <ProjectList user={user} 
-                        projects={projects} 
-                        tasks={tasks} 
-                        setActiveTask = {this.setActiveTask}
-                        markTaskComplete={this.markTaskComplete}
-                        />
-                    </main>
-                    {activeTask ? <EditModal task={tasks.filter(task => task.id === activeTask).pop()} setActiveTask={this.setActiveTask} clearActiveTask={this.clearActiveTask} deleteTask={() => this.deleteTask(activeTask)} editTask={this.editTask}/> : "" }
-                </section>
+                <UserContext.Provider value = {{user: this.state.user}}>
+                    <section className={`dashboard ${activeTask !== "" ? `dashboard--3col`: ``}`}>
+                        <Sidebar projects={projects} />
+                        <main className={`${activeTask === "" ? "main" : "main--shrink"}`}>
+                            <Greeter 
+                                greeting={`Your projects`}
+                                subheading={subheading} 
+                                />
+                            <ProjectList user={user} 
+                            projects={projects} 
+                            tasks={tasks} 
+                            setActiveTask = {this.setActiveTask}
+                            markTaskComplete={this.markTaskComplete}
+                            />
+                        </main>
+                        {activeTask ? <EditModal task={tasks.filter(task => task.id === activeTask).pop()} setActiveTask={this.setActiveTask} clearActiveTask={this.clearActiveTask} deleteTask={() => this.deleteTask(activeTask)} editTask={this.editTask}/> : "" }
+                    </section>
+                </UserContext.Provider>
             )
         }
     }

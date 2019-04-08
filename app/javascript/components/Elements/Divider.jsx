@@ -6,4 +6,4 @@ const Divider = styled.div `
   
 `
 
-export {Divider}
+export default Divider

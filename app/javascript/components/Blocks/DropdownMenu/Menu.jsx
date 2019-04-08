@@ -8,8 +8,7 @@ const Menu = styled.div `
     background: white;
     z-index: 2;
     box-shadow: 0 20px 40px rgba(0,0,0,0.10);
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
+
     ${({fullWidth}) => fullWidth && `
         width: 100%
     `}

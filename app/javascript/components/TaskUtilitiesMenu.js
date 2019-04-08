@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useRef} from "react"
 import classNames from 'classnames'
 
-
 import RadialChart from './RadialChart'
 import DropdownMenu from './DropdownMenu'
 import Dropdown from "./Blocks/DropdownMenu/Index"
-import {Divider} from "./Elements/Divider"
 import ContentRow from './Blocks/ContentRow'
 
 export default function TaskUtilitiesMenu(props) {
@@ -53,7 +51,7 @@ export default function TaskUtilitiesMenu(props) {
                             </Dropdown.Link>
                         )
                     })}
-                <Divider />
+                <Dropdown.Separator/>
                 <Dropdown.Label>Filters</Dropdown.Label>
                     <DropdownMenu 
                     data={props.filterModes}

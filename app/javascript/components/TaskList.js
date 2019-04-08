@@ -1,9 +1,26 @@
 import React, {useState} from "react"
 import Task from './Task'
+import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
+
+
 export default function TaskList(props) {
  
     const { tasks, markTaskComplete, setActiveTask, currentSortMode, currentFilterMode } = props
+    
+    
+    const SortableItem = SortableElement(({value}) => <li>{value}</li>);
 
+    const SortableList = SortableContainer(({items}) => {
+    return (
+        <ul>
+        {items.map((value, index) => (
+            <SortableItem key={`item-${index}`} index={index} value={value} />
+        ))}
+        </ul>
+    );
+    });
+
+    
     if (tasks.length < 1) {
         return(
             <div className="empty-list">

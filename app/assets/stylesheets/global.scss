@@ -196,22 +196,6 @@ input {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-column-gap: 1rem;
-  .project-card {
-    width: 100%;
-    padding: 2rem;
-    box-shadow: $soft-shadow;
-    @extend %flex-hc-stretch--column;
-  }
-  .new-project-link {
-    @extend %flex-center-everything--column
-  }
-  .circle {
-    height: 3rem;
-    width: 3rem;
-    background-color: black; 
-    border-radius: 1000px;
-    @extend %flex-center-everything--column;
-  }
 }
 
 .new-task-extension {

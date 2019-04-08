@@ -7,7 +7,7 @@ import DropdownMenu from './DropdownMenu'
 import {Modal, ModalColumn} from "./Blocks/EditModal/Index"
 import ContentRow from "./Blocks/ContentRow"
 import Check from "./Elements/Check"
-import {Divider} from "./Elements/Divider"
+import Divider from "./Elements/Divider"
 
 const CancelToken = Axios.CancelToken;
 const source = CancelToken.source()

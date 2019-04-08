@@ -1,12 +1,13 @@
 import React from "react"
-import SideBar from './Sidebar'
 import Axios from 'axios'
+
+import Card from "./Blocks/ProjectCard/Index"
 
 export default function ProjectCard(props) {
     return (
-        <div className="project-card">
+        <Card>
             <h2>{props.project.name}</h2>
-            <p></p>
-        </div>
+            <p>7 out of 10 tasks completed</p>
+        </Card>
     )
 } 
