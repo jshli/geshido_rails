@@ -15,7 +15,7 @@ const Link = styled.a`
         }
 `
 
-export default function Sidebar(props){
+export default function Sidebar(props){     
     
     const { projects } = props
     return (
@@ -45,7 +45,7 @@ export default function Sidebar(props){
         
             {projects.map(project => 
                 (
-                <Link key={`${project.id}`} href ="">
+                <Link key={`${project.id}`} onClick={() => props.setActiveProject(project)}>
                     <p >{`${project.name}`}</p>
                 </Link>
                 ))

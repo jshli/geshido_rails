@@ -13,7 +13,7 @@ class TasksController < ApplicationController
     def today
         if logged_in?
             @user = current_user
-            @tasks = @user.tasks.where(is_completed: false).where("due_date <= ?", Time.new.end_of_day)
+            @tasks = @user.tasks.where.not(due_date: "").where("due_date <= ?", Time.new.end_of_day)
             @projects = current_user.projects
         else
             redirect_to '/login'

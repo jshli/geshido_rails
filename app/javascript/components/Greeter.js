@@ -13,7 +13,7 @@ export default function Greeter(props) {
             {({ user }) => (
                 <div>
                     <div className="greeting-header-wrap">
-                        <h1>{`${greeting}, ${user.first_name} `}</h1>
+                        <h1>{`${greeting}`}</h1>
                         {props.currentMode === "tasks" ? 
                             <TaskUtilitiesMenu 
                                 currentSortMode = {props.currentSortMode}

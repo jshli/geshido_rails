@@ -32,7 +32,8 @@ class Dashboard extends React.Component {
             greeting: this.props.greeting,
             subheading: this.props.subheading,
             currentSortMode: "Newest",
-            currentFilterMode: "All"
+            currentFilterMode: "All",
+            activeProject: "",
         }
     }
     
@@ -72,7 +73,8 @@ class Dashboard extends React.Component {
         }
     }
 
-
+    
+    //checks if there is already an active task. If there is, then it saves any changes
     setActiveTask = task => {
         if (this.state.activeTask !== ""){
             let url = `/tasks/${this.state.activeTask}`
@@ -93,6 +95,18 @@ class Dashboard extends React.Component {
                 activeTask: task.id
             })
         }
+    }
+
+    setActiveProject = project => {
+        const url = '/api/tasks'
+        Axios.get(url)
+        .then(res => this.setState({
+            activeProject: project,
+            tasks: res.data.filter(task => task.project_id === project.id),
+            newItem: {...this.state.newItem, projectId: project.id},
+            currentMode: "tasks",
+            greeting: project.name
+        }))
     }
 
     //saves changes made to edited task to server
@@ -209,11 +223,14 @@ class Dashboard extends React.Component {
                 <TasksContext.Provider value = {{ tasks: this.state.tasks}}>
                     <UserContext.Provider value = {{user: this.state.user}}>
                         <section className={`dashboard ${activeTask !== "" ? `dashboard--3col`: ``}`}>
-                            <Sidebar projects={projects} />
+                            <Sidebar 
+                            projects={projects}
+                            setActiveProject={this.setActiveProject}
+                             />
                             <main className={`${activeTask === "" ? "main" : "main--shrink"}`}>
                                 <div>
                                     <Greeter 
-                                    greeting={`Welcome back`}
+                                    greeting={greeting}
                                     subheading={subheading} 
                                     sortModes={SORT_MODES}
                                     filterModes={FILTER_MODES}
@@ -270,10 +287,10 @@ class Dashboard extends React.Component {
             return (
                 <UserContext.Provider value = {{user: this.state.user}}>
                 <section className={`dashboard ${activeTask !== "" ? `dashboard--3col`: ``}`}>
-                    <Sidebar projects={projects} />
+                    <Sidebar projects={projects} 
+                    setActiveProject={this.setActiveProject}/>
                     <main className="main--full">
                         <div>
-                            
                             <Greeter 
                             greeting="Create a new project"
                             subheading="What are we creating today?"
@@ -306,17 +323,18 @@ class Dashboard extends React.Component {
             return (
                 <UserContext.Provider value = {{user: this.state.user}}>
                     <section className={`dashboard ${activeTask !== "" ? `dashboard--3col`: ``}`}>
-                        <Sidebar projects={projects} />
+                        <Sidebar projects={projects} 
+                        setActiveProject={this.setActiveProject}/>
                         <main className={`${activeTask === "" ? "main" : "main--shrink"}`}>
                             <Greeter 
                                 greeting={`Your projects`}
                                 subheading={subheading} 
                                 />
-                            <ProjectList user={user} 
+                            <ProjectList 
+                            user={user} 
+                            setActiveProject={this.setActiveProject}
                             projects={projects} 
                             tasks={tasks} 
-                            setActiveTask = {this.setActiveTask}
-                            markTaskComplete={this.markTaskComplete}
                             />
                         </main>
                         {activeTask ? <EditModal task={tasks.filter(task => task.id === activeTask).pop()} setActiveTask={this.setActiveTask} clearActiveTask={this.clearActiveTask} deleteTask={() => this.deleteTask(activeTask)} editTask={this.editTask}/> : "" }
