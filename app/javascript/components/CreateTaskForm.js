@@ -19,14 +19,14 @@ export default function CreateTaskForm(props) {
         setDueToday(!dueToday);
         setDueTomorrow(false);
         setDueCustom(false);
-        props.setDueDate(Moment.utc().endOf('day').toString())
+        props.setDueDate(Moment().endOf('day').toString())
     }
     
     const handleTomorrow = event => {
         setDueTomorrow(!dueTomorrow)
         setDueToday(false)
         setDueCustom(false)
-        props.setDueDate(Moment.utc().endOf('day').add(2, 'day').toString())
+        props.setDueDate(Moment().endOf('day').add(2, 'day').toString())
     }
 
     const handleProjectClick = id => {

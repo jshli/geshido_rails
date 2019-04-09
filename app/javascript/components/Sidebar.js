@@ -1,18 +1,38 @@
 import React from "react"
+import styled from "styled-components"
+
+import DateIcon from "./DateIcon"
+
+const Link = styled.a`
+    display: grid;
+    grid-auto-flow: column;
+    grid-column-gap: 1rem;
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    color: rgba(0,0,0,0.5);
+    >p {
+        margin-bottom: 0;
+        }
+`
+
 export default function Sidebar(props){
     
     const { projects } = props
     return (
         <aside>
             <div className="border"></div>
-            <a href="/tasks" >
+            <Link href="/today" >
+                <DateIcon/>
+                <p>Today</p>
+            </Link>
+            <Link href="/tasks" >
                 <i className="fas fa-tasks"></i>
-                <p>Tasks</p>
-            </a>
-            <a href="">
+                <p>All Tasks</p>
+            </Link>
+            <Link href="">
                 <i className="fas fa-chart-pie"></i>
                 <p>Timelogs</p>
-            </a>
+            </Link>
             <div className="project-link">
                 <a href="/projects" >
                     <p>Projects</p>
@@ -25,9 +45,9 @@ export default function Sidebar(props){
         
             {projects.map(project => 
                 (
-                <a key={`${project.id}`} href ="">
+                <Link key={`${project.id}`} href ="">
                     <p >{`${project.name}`}</p>
-                </a>
+                </Link>
                 ))
                 }
         </aside>

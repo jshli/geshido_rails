@@ -62,7 +62,7 @@ export default function EditModal(props){
     }
 
     const handleDayClick = day => {
-        props.editTask("due_date", Moment(day).utc().endOf('day').toString())
+        props.editTask("due_date", Moment(day).endOf('day').toString())
 
     }
 

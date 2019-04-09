@@ -107,7 +107,7 @@ export default function Task(props) {
                 {currentProject ? <TaskItem.Text>{currentProject.name}</TaskItem.Text> : ""}
                 <TaskItem.Title>{`${task.name}`}</TaskItem.Title>
                 <ContentRow>
-                    {task.due_date ? <TaskItem.Text>{"Due " + Moment(task.due_date).startOf('day').fromNow()}</TaskItem.Text>: "" }
+                    {task.due_date ? <TaskItem.Text>{"Due " + Moment(task.due_date).endOf('day').fromNow()}</TaskItem.Text>: "" }
                     {totalTime ? <TaskItem.Text>{formatTime(totalTime)} spent so far</TaskItem.Text> : ""}
                 </ContentRow>
             </DetailsColumn>

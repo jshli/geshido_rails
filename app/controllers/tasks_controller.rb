@@ -9,6 +9,16 @@ class TasksController < ApplicationController
             redirect_to '/login'
         end
     end
+
+    def today
+        if logged_in?
+            @user = current_user
+            @tasks = @user.tasks.where(is_completed: false).where("due_date <= ?", Time.new.end_of_day)
+            @projects = current_user.projects
+        else
+            redirect_to '/login'
+        end
+    end
     
     def create 
         if logged_in?
@@ -16,7 +26,7 @@ class TasksController < ApplicationController
             task.name = params[:name]
             task.user_id = params[:user_id]
             task.is_completed = false
-            task.due_date = params[:due_date]
+            task.due_date = params[:due_date].to_date
             task.project_id = params[:project_id]
             task.total_time = 0
             if task.save
@@ -60,7 +70,7 @@ class TasksController < ApplicationController
             task.is_completed = params[:is_completed]
             task.description = params[:description]
             task.start_date = params[:start_date]
-            task.due_date = params[:due_date]
+            task.due_date = params[:due_date].to_date
             task.project_id = params[:project_id]
             if task.save
                 render json: task

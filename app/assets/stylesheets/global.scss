@@ -164,15 +164,10 @@ input {
       transform: translateY(-55%);
     }
     a {
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        padding: 1rem 1.5rem;
-        font-size: 1rem;
-        color: rgba(0,0,0,0.5);
-        p {
-          margin-bottom: 0;
-        }
+        
+    }
+    p{
+      margin-bottom: 0;
     }
     .fa-plus {
       justify-self: flex-end;

@@ -18,5 +18,6 @@
   resources :tasks
   get '/api/tasks', to: 'tasks#show'
   put '/tasks/:id/complete', to: 'tasks#complete'
+  get '/today', to: 'tasks#today'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
