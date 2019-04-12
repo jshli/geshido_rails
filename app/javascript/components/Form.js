@@ -5,9 +5,7 @@ import Btn from "./Elements/Btn"
 
 export default function Form(props){
 
-    const labelToString = str => {
-        return str.toLowerCase().split(" ").join("_")
-    }
+
 
     if (props.type === 'login') {
         return (
@@ -16,7 +14,7 @@ export default function Form(props){
                 <StyledForm.Input name='email' type='email'/>
                 <StyledForm.Label>Password</StyledForm.Label>
                 <StyledForm.Input name='password' type='password' />
-                <Btn>Log in</Btn>
+                <button>Log in</button>
             </StyledForm>
         )
     } 

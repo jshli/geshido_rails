@@ -37,7 +37,7 @@ export default function ProjectList(props) {
             <AddProjectBtn >
                 <AddLink href="/projects/new"><i className="fas fa-plus"></i></AddLink>
             </AddProjectBtn>
-            {projects.map(project => <ProjectCard key={project.id} project={project} setActiveProject={props.setActiveProject}/>)}
+        {projects.map(project => <ProjectCard key={project.id} project={project} setActiveProject={props.setActiveProject}/>)}
         </div>
     )
 } 
